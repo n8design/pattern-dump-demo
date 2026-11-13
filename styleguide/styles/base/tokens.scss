@@ -42,7 +42,15 @@
   --deck-glass-backdrop: blur(3rem) saturate(1.6);
   --deck-glass-edge: oklch(100% 0 0 / 0.16);
   --deck-glass-sheen: oklch(100% 0 0 / 0.3);
-  --deck-glass-shadow: oklch(12% 0.04 325.9 / 0.45);
+  // The cards' shadow falls like the paper's in the waves (components/waves): toward the upper left, over the
+  // reach of the artwork's shifted copies (2.55 by 0.42 units), darkest at the edge and fading out. A unit is a
+  // hundredth of the waves' picture, which covers the screen sliced: max(1vw, 2vh).
+  --deck-paper-unit: max(1vw, 2vh);
+  --deck-paper-shadow:
+    calc(var(--deck-paper-unit) * -0.35) calc(var(--deck-paper-unit) * -0.06) calc(var(--deck-paper-unit) * 0.7)
+      oklch(12% 0.04 325.9 / 0.45),
+    calc(var(--deck-paper-unit) * -1.27) calc(var(--deck-paper-unit) * -0.21) calc(var(--deck-paper-unit) * 2.55)
+      oklch(12% 0.04 325.9 / 0.35);
   --deck-glass-radius: 1.5rem;
 
   // One line of body text: the unit of vertical rhythm.

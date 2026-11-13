@@ -22,8 +22,7 @@
   background: var(--deck-scrim);
   box-shadow:
     inset 0 1px 0 var(--deck-glass-sheen),
-    0 0.125rem 0.25rem var(--deck-glass-shadow),
-    0 1.5rem 4rem var(--deck-glass-shadow);
+    var(--deck-paper-shadow); // the same light as the paper's
   scroll-snap-align: center; // the deck snaps each panel to the middle of the screen
 }
 
@@ -47,4 +46,44 @@
 
 .deck-standfirst {
   margin: 0;
+}
+
+// Revealed out of the paper (see slide.scss): the cover is four screens tall too, its panel in the middle of
+// the screen until it slides back under the paper.
+.deck-rest {
+  display: none;
+}
+
+// No snapping while cards are revealed: snapping would carry the page from one card to the next in one quick
+// animation and play the whole slide back and out in half a second. Each card holds still while it is read anyway.
+:root.waves-reveal:has(.deck) {
+  scroll-snap-type: none;
+}
+
+:root.waves-reveal .deck {
+  overflow-x: clip; // a tucked card reaches past the screen's right edge; clip doesn't stop the cards sticking
+}
+
+:root.waves-reveal .deck-cover {
+  position: relative;
+  min-block-size: 400svh;
+  align-content: start;
+  padding-block: 0;
+}
+
+:root.waves-reveal .deck-panel {
+  position: sticky;
+  inset-block-start: 50%;
+  translate: var(--waves-tuck, 0px) -50%; // --waves-tuck: how far it is tucked under the paper (scripts/waves.ts)
+  margin-block: 50svh 0; // no space below: it stays in the middle until its section has nearly passed
+  scroll-snap-align: none;
+}
+
+:root.waves-reveal .deck-rest {
+  display: block;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  block-size: 1px;
+  scroll-snap-align: center;
 }

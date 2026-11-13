@@ -4,7 +4,8 @@
 <script type="module" src="/_pd/scripts/waves.js"></script>
 <div class="deck">
   <section class="deck-cover">
-    <div class="deck-panel">
+    <span class="deck-rest" aria-hidden="true"></span>
+    <div class="deck-panel" data-waves-card>
       {{#if eyebrow}}<p class="deck-eyebrow t-kicker">{{eyebrow}}</p>{{/if}}
       <h1 class="deck-title t-display">{{title}}</h1>
       {{#if description}}<p class="deck-standfirst t-standfirst">{{description}}</p>{{/if}}

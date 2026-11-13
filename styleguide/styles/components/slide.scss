@@ -18,8 +18,7 @@
   background: var(--deck-scrim);
   box-shadow:
     inset 0 1px 0 var(--deck-glass-sheen),
-    0 0.125rem 0.25rem var(--deck-glass-shadow),
-    0 1.5rem 4rem var(--deck-glass-shadow);
+    var(--deck-paper-shadow); // the same light as the paper's
   scroll-snap-align: center; // the deck snaps each panel to the middle of the screen
 }
 
@@ -39,6 +38,38 @@
 
 .slide-heading {
   margin-block: calc(var(--rhythm) * 0.25) var(--rhythm);
+}
+
+// Revealed out of the paper (scripts/waves.ts turns on `waves-reveal` where it draws the waves): each slide is
+// four screens tall and its panel stays in the middle of the screen while the slide is active; the script slides
+// it out from under the paper and back as the page scrolls, holding it still in between. Without the script the
+// slide stays one screen tall, as above.
+.slide-rest {
+  display: none;
+}
+
+:root.waves-reveal .slide {
+  position: relative;
+  min-block-size: 400svh;
+  align-content: start;
+  padding-block: 0;
+}
+
+:root.waves-reveal .slide-panel {
+  position: sticky;
+  inset-block-start: 50%;
+  translate: var(--waves-tuck, 0px) -50%; // --waves-tuck: how far it is tucked under the paper (scripts/waves.ts)
+  margin-block: 50svh 0; // no space below: it stays in the middle until its section has nearly passed
+  scroll-snap-align: none;
+}
+
+:root.waves-reveal .slide-rest {
+  display: block;
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  block-size: 1px;
+  scroll-snap-align: center;
 }
 
 .slide-text > :first-child { margin-top: 0; }

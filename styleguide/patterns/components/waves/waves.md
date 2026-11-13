@@ -17,6 +17,12 @@ back where the artwork has it. The script `waves` draws this with WebGL on a can
 shapes, colours and shadow recipe from the SVG itself. Here, with no page to scroll, it shows the artwork as it
 is.
 
+**The deck's cards** (elements marked `data-waves-card`, one per section) come out from under the paper. Each
+lies between two layers: on the highest layer whose paper still overlaps it where it rests. Tucked, it is moved
+right under the paper of the layers above until only its left edge shows; the script draws those layers again
+over the card, clipped to it, and slides the card out (translate only) as its section comes in. At rest none of
+them overlaps it, so it lies on top with nothing to switch. The deck layout (`layouts/deck`) says when this is on.
+
 **Without WebGL 2**, without JavaScript, or with reduced motion, the SVG is the picture: the same artwork,
 still.
 
