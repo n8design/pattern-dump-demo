@@ -1,5 +1,6 @@
 ---
 title: Waves
+preview: full
 requireScript: waves
 ---
 

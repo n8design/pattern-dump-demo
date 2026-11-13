@@ -2,7 +2,7 @@
   <span class="slide-rest" aria-hidden="true"></span>
   <div class="slide-panel" data-waves-card>
     {{#if eyebrow}}<p class="slide-eyebrow t-kicker">{{eyebrow}}</p>{{/if}}
-    <h2 class="slide-heading">{{heading}}</h2>
+    <h2 class="slide-heading"{{#if anchor}} id="{{anchor}}"{{/if}}>{{heading}}</h2>
     <div class="slide-text">{{{text}}}</div>
   </div>
 </section>

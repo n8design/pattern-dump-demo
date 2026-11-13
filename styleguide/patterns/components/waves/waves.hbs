@@ -1,3 +1,5 @@
+{{!-- Before the waves are painted: mark that the waves script may take over, so the still picture starts in the arrangement the canvas will draw (waves.scss). The script takes the mark off again if it can't run. --}}
+<script>document.documentElement.classList.add("waves-js")</script>
 <div class="waves" aria-hidden="true">
   <svg class="waves-svg" viewBox="0 0 100 50" preserveAspectRatio="xMidYMid slice" focusable="false">
     <defs>

@@ -48,6 +48,47 @@
   margin: 0;
 }
 
+// Learn more: a link to the first slide, set as the cover's last line. Apricot on the glass like the eyebrow, with
+// a heavier underline and an arrow pointing down the page; a clear ring when focused from the keyboard.
+.deck-more {
+  margin: var(--rhythm) 0 0;
+}
+
+.deck-more-link {
+  display: inline-flex;
+  gap: 0.5em;
+  align-items: baseline;
+  padding-block: 0.25em;
+  color: var(--deck-accent);
+  font-family: var(--font-meta);
+  font-size: var(--step-0);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.3em;
+}
+
+.deck-more-link::after {
+  content: "↓" / "";
+}
+
+.deck-more-link:hover {
+  text-decoration-thickness: 0.15em;
+}
+
+.deck-more-link:focus-visible {
+  outline: 2px solid var(--deck-accent);
+  outline-offset: 0.35em;
+  border-radius: 0.25em;
+}
+
+// Without the script, the link still scrolls smoothly to its slide, where motion is welcome.
+@media (prefers-reduced-motion: no-preference) {
+  :root:has(.deck) {
+    scroll-behavior: smooth;
+  }
+}
+
 // Revealed out of the paper (see slide.scss): the cover is --reveal-length screens tall too, its panel in the middle of
 // the screen until it slides back under the paper.
 .deck-rest {

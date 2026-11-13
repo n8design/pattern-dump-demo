@@ -69,11 +69,16 @@ if (root) root.dataset.wavesScript = "";
 
 if (first && root && svg && motionOk.matches && typeof Worker !== "undefined" && typeof OffscreenCanvas !== "undefined"
   && typeof ImageBitmapRenderingContext !== "undefined") {
-  start(root, svg).catch(() => stop(root));
+  start(root, svg).then((ok) => { if (!ok) stop(root); }, () => stop(root));
+} else if (first) {
+  stop(document.documentElement);
 }
 
 function stop(root: HTMLElement): void {
+  // Back to the still artwork as drawn (waves.scss): no mark for the script, no layer moved.
+  document.documentElement.classList.remove("waves-js");
   root.classList.remove("waves-live");
+  root.querySelectorAll<SVGGElement>(".waves-layer").forEach((g) => g.style.removeProperty("translate"));
   document.documentElement.classList.remove("waves-reveal");
   root.querySelector(".waves-canvas")?.remove();
   document.querySelector(".waves-over")?.remove();
@@ -84,13 +89,24 @@ const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
 // (zero speed at both ends). Going back is the same movement played backwards, so scrolling up retraces it.
 const settle = (t: number) => { const e = 1 - (1 - clamp01(t)) ** 2; return e * e * (3 - 2 * e); };
 
-async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
+async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
   const offscreen = new OffscreenCanvas(1, 1);
   const gl = offscreen.getContext("webgl2", { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "low-power" });
-  if (!gl) return;
+  if (!gl) return false;
   const wide = "drawingBufferColorSpace" in gl;
   if (wide) gl.drawingBufferColorSpace = "display-p3";
   const space: PredefinedColorSpace = wide ? "display-p3" : "srgb";
+
+  // Until the canvas takes over, the still SVG shows the arrangement the canvas starts with (the layers fanned out
+  // as far as the scroll position puts them), so the hand-over doesn't jump; the canvas then fades in over it.
+  const svgLayers = [...svg.querySelectorAll<SVGGElement>(".waves-layer")];
+  const placeSvg = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 1;
+    svgLayers.forEach((g, k) => { g.style.translate = `${(1 - p) * k * DRIFT.x}px ${(1 - p) * k * DRIFT.y}px`; });
+  };
+  placeSvg();
+  addEventListener("scroll", placeSvg, { passive: true });
 
   // What the SVG holds.
   const paths = [...svg.querySelectorAll<SVGPathElement>("defs .waves-shape")];
@@ -107,7 +123,7 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
     return { dx: Number(m?.[1] ?? 0), dy: Number(m?.[2] ?? 0), mix: parseFloat(cs.getPropertyValue("--mix")) / 100, opacity: Number(cs.opacity) };
   });
   const n = shapes.length;
-  if (!n || n > MAX_LAYERS || n !== fills.length || !copies.length) return;
+  if (!n || n > MAX_LAYERS || n !== fills.length || !copies.length) return false;
 
   // The copies lie along one line: the furthest is the shadow's full reach; each copy covers a point that the
   // layer covers when moved back by its share of the reach.
@@ -217,6 +233,7 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
   // rests, since the drift moves the paper a little meanwhile.
   let cards: Card[] = [];
   let laidOut = "";
+  let firstLayout = true;
   const sectionOf = (el: HTMLElement) => (el.closest("section") ?? el.parentElement) as HTMLElement;
   // The drift of the paper at points of a section, in screens from where the screen's middle meets its top.
   const driftIn = (section: HTMLElement, screens: number[]) => {
@@ -255,6 +272,19 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
       cardEls.forEach((el) => el.style.removeProperty("--waves-tuck"));
     }
     if (over) over.hidden = !reveal;
+    // Where each card rests (out from under the paper, still), for the deck's Learn more link (scripts/deck.ts).
+    const p = phases(length), resting = (p.outTo + p.backFrom) / 2;
+    cards.forEach((c) => {
+      if (reveal) c.section.dataset.wavesRest = String(Math.round(scrollY + c.section.getBoundingClientRect().top + (resting - 0.5) * innerHeight));
+      else delete c.section.dataset.wavesRest;
+    });
+    // The reveal changes the page's length; a page opened at an anchor goes back to that slide.
+    if (firstLayout && location.hash) {
+      const at = document.getElementById(decodeURIComponent(location.hash.slice(1)))?.closest<HTMLElement>("section");
+      const rest = Number(at?.dataset.wavesRest);
+      if (at && Number.isFinite(rest) && at.dataset.wavesRest) scrollTo({ top: rest, behavior: "instant" });
+    }
+    firstLayout = false;
   }
   function measure(c: Card): Card {
     if (c.depth > -2) return c;
@@ -366,10 +396,13 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
     if (!queued) { queued = true; requestAnimationFrame((t) => { queued = false; draw(t); }); }
   }
   draw();
-  root.classList.add("waves-live");
+  removeEventListener("scroll", placeSvg);
+  // A frame later, so the canvas's fade-in starts from transparent (waves.scss).
+  requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add("waves-live")));
   addEventListener("scroll", request, { passive: true });
   addEventListener("resize", () => { drawn = ""; laidOut = ""; request(); });
   motionOk.addEventListener("change", () => { if (!motionOk.matches) stop(root); });
+  return true;
 }
 
 /** A CSS colour as 0–1 channel values in the canvas's colour space, read by painting one pixel. */

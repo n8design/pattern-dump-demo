@@ -1,13 +1,31 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Slide",
-  "description": "One idea on one screen. On a page: <pd-components-slide eyebrow=\"…\" heading=\"…\">text</pd-components-slide>.",
+  "description": "One idea on one screen. On a page: <pd-components-slide eyebrow=\"\u2026\" heading=\"\u2026\">text</pd-components-slide>.",
   "type": "object",
-  "required": ["heading", "text"],
+  "required": [
+    "heading",
+    "text"
+  ],
   "x-pd-content": "text",
   "properties": {
-    "eyebrow": { "type": "string", "description": "A short line above the headline: where the slide sits in the story" },
-    "heading": { "type": "string", "description": "The slide's one idea, as its headline" },
-    "text": { "type": "string", "contentMediaType": "text/markdown", "description": "The slide's content: the tag's content, as markdown" }
+    "eyebrow": {
+      "type": "string",
+      "description": "A short line above the headline: where the slide sits in the story"
+    },
+    "heading": {
+      "type": "string",
+      "description": "The slide's one idea, as its headline"
+    },
+    "text": {
+      "type": "string",
+      "contentMediaType": "text/markdown",
+      "description": "The slide's content: the tag's content, as markdown"
+    },
+    "anchor": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "An id for the slide's headline, so a link can point at it (as the cover's link to the first slide does)"
+    }
   }
 }

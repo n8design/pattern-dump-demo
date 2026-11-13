@@ -52,6 +52,10 @@
   --reveal-length: 3;
   --reveal-damping: 1;
 
+  // How long the cover's Learn more link takes to scroll to the first slide (layouts/deck, scripts/deck.ts), so
+  // its card slides out at the reveal's pace rather than the browser's quick default.
+  --learn-more-duration: 1.8s;
+
   // The cards' shadow falls like the paper's in the waves (components/waves): toward the upper left, over the
   // reach of the artwork's shifted copies (2.55 by 0.42 units), darkest at the edge and fading out. A unit is a
   // hundredth of the waves' picture, which covers the screen sliced: max(1vw, 2vh).

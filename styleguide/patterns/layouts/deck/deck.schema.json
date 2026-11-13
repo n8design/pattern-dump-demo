@@ -3,10 +3,38 @@
   "title": "Deck",
   "description": "A page as a slide deck: a cover, then one slide per screen over the Sunset waves. A page uses it with layout: deck.",
   "type": "object",
-  "required": ["title"],
+  "required": [
+    "title"
+  ],
   "properties": {
-    "title": { "type": "string", "description": "The cover's headline, the page's title in the navigation and in search results" },
-    "eyebrow": { "type": "string", "description": "A short line above the cover's headline" },
-    "description": { "type": "string", "description": "The cover's standfirst, and the page's description for search results" }
+    "title": {
+      "type": "string",
+      "description": "The cover's headline, the page's title in the navigation and in search results"
+    },
+    "eyebrow": {
+      "type": "string",
+      "description": "A short line above the cover's headline"
+    },
+    "description": {
+      "type": "string",
+      "description": "The cover's standfirst, and the page's description for search results"
+    },
+    "more": {
+      "type": "string",
+      "description": "The text of a link on the cover to the first slide, such as Learn more. Needs moreTarget"
+    },
+    "moreTarget": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The anchor of the slide the cover's link goes to: that slide's anchor value"
+    }
+  },
+  "dependentRequired": {
+    "more": [
+      "moreTarget"
+    ],
+    "moreTarget": [
+      "more"
+    ]
   }
 }

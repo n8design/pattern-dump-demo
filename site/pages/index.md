@@ -3,9 +3,11 @@ title: Pattern Dump
 layout: deck
 eyebrow: A tour in eleven slides
 description: How Pattern Dump turns components and markdown pages into a checked website.
+more: Learn more
+moreTarget: the-problem
 ---
 
-<pd-components-slide eyebrow="01 · The problem" heading="Design systems and websites drift apart">
+<pd-components-slide eyebrow="01 · The problem" heading="Design systems and websites drift apart" anchor="the-problem">
 The design system lives in one tool, the website in another. Components get copied, renamed and half
 updated. Nobody can say which page still uses the old card, or whether the values it was given still fit.
 </pd-components-slide>
