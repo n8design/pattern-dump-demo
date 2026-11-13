@@ -1,0 +1,15 @@
+{
+  "name": "@pattern-dump-demo/site",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Pattern Dump demo site: pages and images only. Its look comes from ../styleguide.",
+  "type": "module",
+  "scripts": {
+    "dev": "pd dev",
+    "build": "pd build"
+  },
+  "devDependencies": {
+    "@pattern-dump-demo/styleguide": "file:../styleguide",
+    "pattern-dump": "0.3.0"
+  }
+}

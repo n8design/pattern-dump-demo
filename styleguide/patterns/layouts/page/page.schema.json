@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Page",
+  "description": "The layout every page renders with. Its properties are what a page's frontmatter may set.",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "title": { "type": "string", "description": "The page's heading and its title in the navigation" },
+    "description": { "type": "string", "description": "The page's description for search results" }
+  }
+}

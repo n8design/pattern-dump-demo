@@ -1,0 +1,6 @@
+{
+  "title": "A page",
+  "body": "<p>The page's markdown, rendered.</p>",
+  "site": { "title": "Pattern Dump demo" },
+  "nav": [{ "route": "/", "title": "Home", "current": true }]
+}

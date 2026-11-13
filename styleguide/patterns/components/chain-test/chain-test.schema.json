@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Chain test",
+  "description": "Setup only: proves that a change in the style guide reaches the site. On a page: <pd-components-chain-test label=\"…\"></pd-components-chain-test>.",
+  "type": "object",
+  "required": ["label"],
+  "properties": {
+    "label": { "type": "string", "description": "One line of text" }
+  }
+}

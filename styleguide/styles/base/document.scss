@@ -1,0 +1,3 @@
+// The base layer (documentBase): document defaults under every preview and every site page.
+*, *::before, *::after { box-sizing: border-box; }
+:where(body) { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; }
