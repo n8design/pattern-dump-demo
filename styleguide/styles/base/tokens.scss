@@ -42,6 +42,9 @@
   --deck-glass-backdrop: blur(3rem) saturate(1.6);
   --deck-glass-edge: oklch(100% 0 0 / 0.16);
   --deck-glass-sheen: oklch(100% 0 0 / 0.3);
+  // The site header's height (components/site-header): it is fixed, and pages leave this much room above them.
+  --site-header-size: 3.5rem;
+
   // The deck's reveal (layouts/deck, scripts/waves.ts), to tune: how many screen heights of scrolling each slide
   // takes, and how the card follows the scroll. Damping is the share of the remaining distance a card closes per
   // frame (at 60 Hz, and the same per second at any rate): 1 follows the scroll exactly, 0.1 to 0.2 trails it

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Site header",
+  "description": "The site's header: its name, linking home, and the navigation. Fixed to the top of the screen.",
+  "type": "object",
+  "required": [
+    "site"
+  ],
+  "properties": {
+    "site": {
+      "type": "object",
+      "description": "Values every page shares: storefront.site in the site's config",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The site's name, linking home"
+        }
+      }
+    },
+    "nav": {
+      "type": "array",
+      "description": "The navigation, as Pattern Dump gives it to every page",
+      "items": {
+        "type": "object",
+        "required": [
+          "route",
+          "title"
+        ],
+        "properties": {
+          "route": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "current": {
+            "type": "boolean",
+            "description": "The page being shown"
+          }
+        }
+      }
+    }
+  }
+}

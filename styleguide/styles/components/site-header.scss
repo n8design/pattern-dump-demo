@@ -1,0 +1,64 @@
+// The site header (components/site-header): the site's name and the navigation, fixed to the top of the screen
+// at --site-header-size (tokens.scss). Pages leave that room above their content (partials/base), and the scroll
+// padding keeps anchored and focused elements clear of it.
+:root {
+  scroll-padding-block-start: var(--site-header-size);
+}
+
+.site-header {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 2; // above the deck's paper over the cards (components/waves)
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+  align-items: center;
+  justify-content: space-between;
+  min-block-size: var(--site-header-size);
+  padding-inline: max(1rem, (100% - 44rem) / 2 + 1rem); // lines up with the page's text column (partials/base)
+  background: Canvas;
+  color: CanvasText;
+  box-shadow: 0 1px 0 color-mix(in oklch, CanvasText 15%, transparent);
+}
+
+.site-header-title {
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header-nav ul {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-header-nav a {
+  color: inherit;
+}
+
+// The current page: a heavier underline, so it doesn't rest on colour alone.
+.site-header-nav [aria-current="page"] {
+  text-decoration-thickness: 0.15em;
+  text-underline-offset: 0.25em;
+}
+
+// In the deck: full width, on the cards' glass over the waves, cream type.
+.site--deck .site-header {
+  padding-inline: clamp(1rem, 6vw, 8rem);
+  border-block-end: 1px solid var(--deck-glass-edge);
+  background: var(--deck-scrim);
+  box-shadow: none;
+  color: var(--deck-ink);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .site--deck .site-header {
+    background: var(--deck-glass);
+    -webkit-backdrop-filter: var(--deck-glass-backdrop);
+    backdrop-filter: var(--deck-glass-backdrop);
+  }
+}

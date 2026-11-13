@@ -1,0 +1,16 @@
+{
+  "site": {
+    "title": "Pattern Dump demo"
+  },
+  "nav": [
+    {
+      "route": "/",
+      "title": "Home",
+      "current": true
+    },
+    {
+      "route": "/about/",
+      "title": "About"
+    }
+  ]
+}
