@@ -4,7 +4,7 @@
 // starts a tour: the page scrolls to where the first slide's card rests, out from under the paper, over
 // --learn-more-duration (tokens.scss) with an ease-in-out, so the card slides out at its own pace. Once there, the
 // tour waits as long as reading the card takes, at --reading-speed words a minute, before it moves on to the next
-// card. It ends on the last card. While it plays, a "Stop tour" button shows below the header; it, Escape, and any
+// card, with a bar along the card's lower edge filling up meanwhile. It ends on the last card. While it plays, a "Stop tour" button shows below the header; it, Escape, and any
 // wheel, touch, pointer or key input stop the tour and leave the page where it is, and so does leaving the tab.
 // The focus stays put during the tour, so a screen reader isn't interrupted at every card: when the tour ends or
 // stops, the headline of the card it last reached takes the focus (without scrolling). With reduced motion the
@@ -62,7 +62,11 @@ async function tour(stops: HTMLElement[], anchor: string): Promise<void> {
       await glide(restingPlace(target), duration, control.signal);
       reached = target;
       if (i === 0 && location.hash !== `#${anchor}`) history.pushState(null, "", `#${anchor}`);
-      if (i < stops.length - 1) await wait(readingTime(target, wpm), control.signal);
+      if (i < stops.length - 1) {
+        const ms = readingTime(target, wpm);
+        const hide = progress(target, ms);
+        try { await wait(ms, control.signal); } finally { hide(); }
+      }
     }
   } catch {
     // Stopped: the page stays where the reader took over.
@@ -98,6 +102,24 @@ function land(target: HTMLElement, anchor: string): void {
   if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
   target.focus({ preventScroll: true });
   if (anchor && location.hash !== `#${anchor}`) history.pushState(null, "", `#${anchor}`);
+}
+
+/** A bar along the card's lower edge that fills up over `ms`, until the tour moves on (decorative: the time is
+ *  shown, not announced). Returns what takes it away again. */
+function progress(target: HTMLElement, ms: number): () => void {
+  const card = target.closest<HTMLElement>("[data-waves-card]") ?? target;
+  const bar = document.createElement("span");
+  bar.className = "deck-tour-progress";
+  bar.setAttribute("aria-hidden", "true");
+  bar.style.setProperty("--tour-wait", `${Math.round(ms)}ms`);
+  // The bar is placed in the card; a card that isn't positioned already (sticky in the reveal) is made relative.
+  const placed = getComputedStyle(card).position === "static";
+  if (placed) card.style.position = "relative";
+  card.append(bar);
+  return () => {
+    bar.remove();
+    if (placed) card.style.removeProperty("position");
+  };
 }
 
 /** Scrolls to `to` over `duration` with an ease-in-out; rejects as soon as the tour is stopped. */

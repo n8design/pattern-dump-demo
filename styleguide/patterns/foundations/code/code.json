@@ -1,0 +1,9 @@
+{
+  "before": "Start the workbench with",
+  "inline": "npm run dev",
+  "after": "and open the address it prints.",
+  "keysLabel": "Stop the deck's tour with",
+  "key": "Esc",
+  "block": "npx pattern-dump init --storefront\nnpm run dev",
+  "backdropLabel": "Over colour, the block lets it show faintly through."
+}

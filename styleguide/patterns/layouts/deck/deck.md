@@ -32,8 +32,9 @@ gets a link to that slide. Without JavaScript it is an ordinary link to the slid
 motion is welcome). With the `deck` script it starts a tour through that slide and every one after it. It
 scrolls to where each card rests, over `--learn-more-duration` (tokens.scss) with an ease-in-out, so the card
 slides out at its own pace. It then waits as long as reading the card takes, a second plus its words at
-`--reading-speed` (238 words a minute, the average for silent reading of non-fiction), and moves on; it ends on
-the last card. The first stop also updates the address. While it plays, a "Stop tour" button shows below the
+`--reading-speed` (238 words a minute, the average for silent reading of non-fiction), while a thin bar along
+the card's lower edge fills up over that time, and moves on; it ends on the last card. The bar is decorative
+(`aria-hidden`). The first stop also updates the address. While it plays, a "Stop tour" button shows below the
 header (after it in the page's order); the button, Escape, any wheel, touch, pointer or key input, or leaving
 the tab stops the tour and hands the scroll back. The focus stays where it is during the tour, so a screen reader
 isn't interrupted at every card; when the tour ends or stops, the headline of the card it last reached takes it

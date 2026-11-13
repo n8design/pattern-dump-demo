@@ -42,6 +42,14 @@
   --deck-glass-backdrop: blur(3rem) saturate(1.6);
   --deck-glass-edge: oklch(100% 0 0 / 0.16);
   --deck-glass-sheen: oklch(100% 0 0 / 0.3);
+
+  // Code (base/typography.scss, foundations/code): nearly black, with a trace of the night's aubergine, and partly
+  // see-through, so a block lets the glass and the waves show faintly through it. Cream type on it. Over white,
+  // the worst case, the black still gives the cream 7.8 : 1; over the deck's glass more.
+  --code-bg: oklch(12% 0.015 325.9 / 0.72);
+  --code-ink: oklch(96.23% 0.044 88.1);
+  --code-edge: oklch(100% 0 0 / 0.1);
+  --code-radius: 0.5rem;
   // The site header's height (components/site-header): it is fixed, and pages leave this much room above them.
   --site-header-size: 3.5rem;
 

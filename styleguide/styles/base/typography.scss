@@ -63,6 +63,29 @@
   overflow-x: auto;
 }
 
+// Code blocks and code in running text: cream on nearly black, partly see-through (tokens.scss, foundations/code).
+:where(pre) {
+  padding: 1em 1.25em;
+  border: 1px solid var(--code-edge);
+  border-radius: var(--code-radius);
+  background: var(--code-bg);
+  color: var(--code-ink);
+}
+
+:where(:not(pre) > code, kbd, samp) {
+  padding: 0.1em 0.35em;
+  border-radius: calc(var(--code-radius) * 0.5);
+  background: var(--code-bg);
+  color: var(--code-ink);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+// Inside a block, the code is the block's: no second background.
+:where(pre code) {
+  font-size: inherit;
+}
+
 :where(blockquote) {
   margin-inline: 0;
   font-style: italic;

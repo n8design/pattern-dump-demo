@@ -163,3 +163,20 @@
   outline: 2px solid var(--deck-accent);
   outline-offset: 0.2em;
 }
+
+// The tour's progress on a card (scripts/deck.ts): a thin bar along the card's lower edge, inside its rounded
+// corners, that fills from the left over the time the tour waits on the card (--tour-wait).
+.deck-tour-progress {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: var(--deck-glass-radius);
+  block-size: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--deck-accent);
+  transform-origin: left;
+  animation: deck-tour-progress var(--tour-wait, 10s) linear both;
+}
+
+@keyframes deck-tour-progress {
+  from { scale: 0 1; }
+}
