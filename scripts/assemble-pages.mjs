@@ -1,7 +1,8 @@
 // Puts the two builds together as one GitHub Pages artifact in _site/, published as a project page under a
 // sub-path (the argument, such as /pattern-dump-demo/): the website at that path, the style guide's workbench
-// under <path>styleguide/, and the files the site serves at its root (site/static: the favicon, which browsers ask
-// for at <path>favicon.ico; Pattern Dump has no way to place files there or to link an icon from the head).
+// under <path>styleguide/, and the files the site serves at its root (site/static: the favicon). Browsers look for
+// a favicon at the root of the host, which a project page doesn't own, so the website's pages get a link to it in
+// their head here (Pattern Dump has no way to place files at the site's root or to add to the head).
 // Run by `npm run pages`, locally and in .github/workflows/pages.yml.
 //
 // pattern-dump 0.3.0 builds the website for the root of a host only (see DEMO-GAPS): its pages link
@@ -42,6 +43,7 @@ let rewritten = 0;
 if (base !== "/") {
   for (const file of htmlFiles(out)) {
     const html = readFileSync(file, "utf8")
+      .replace(/<head>/i, '<head>\n<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">')
       .replace(/\b(href|src)="([^"]*)"/g, (m, attr, url) => `${attr}="${prefix(url)}"`)
       .replace(/\bsrcset="([^"]*)"/g, (m, list) =>
         `srcset="${list.split(",").map((part) => part.trim().replace(/^\S+/, prefix)).join(", ")}"`);
