@@ -8,6 +8,8 @@ export default defineConfig({
   outDir: "./dist",
   styles: { strategy: "parallel", dir: "./styles" },
   documentBase: ["base"],
+  dataDir: "./data",
+  scriptsDir: "./scripts",
   shell: {
     brand: { title: "Pattern Dump demo: style guide" },
   },

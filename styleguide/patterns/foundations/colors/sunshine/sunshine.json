@@ -1,0 +1,16 @@
+{
+  "key": "sunshine",
+  "name": "Sunshine",
+  "note": "A lemon-to-amber ground, near-black type, crimson and bottle green as dots and accents.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "lemon",
+    "amber",
+    "crimson",
+    "bottle",
+    "ink"
+  ]
+}

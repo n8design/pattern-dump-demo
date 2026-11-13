@@ -1,0 +1,127 @@
+// Editorial typography: element defaults and the roles of an article.
+//
+// Element rules use :where() (no specificity), so any component's own rules win over them.
+
+// --- Running text
+
+:where(body) {
+  font-family: var(--font-text);
+  font-size: var(--step-0);
+  line-height: var(--leading-text);
+  font-kerning: normal;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  overflow-wrap: break-word;
+}
+
+:where(p, ul, ol, dl, blockquote, pre, figure, table) {
+  margin-block: 0 var(--rhythm);
+}
+
+:where(p, li, dd, blockquote, figcaption) {
+  text-wrap: pretty;
+}
+
+// --- Headings: the display face, tighter leading and tracking as they grow
+
+:where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  font-variant-numeric: lining-nums;
+  text-wrap: balance;
+  margin-block: calc(var(--rhythm) * 1.5) calc(var(--rhythm) * 0.5);
+}
+
+:where(h1) {
+  font-size: var(--step-5);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  margin-block-start: 0;
+}
+:where(h2) { font-size: var(--step-4); }
+:where(h3) { font-size: var(--step-2); }
+:where(h4) { font-size: var(--step-1); }
+:where(h5, h6) { font-size: var(--step-0); letter-spacing: 0; }
+
+// --- Small text, code
+
+:where(small, figcaption) {
+  font-family: var(--font-meta);
+  font-size: var(--step--1);
+  line-height: var(--leading-meta);
+}
+
+:where(code, kbd, samp, pre) {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+:where(pre) {
+  line-height: var(--leading-meta);
+  overflow-x: auto;
+}
+
+:where(blockquote) {
+  margin-inline: 0;
+  font-style: italic;
+}
+
+// --- Editorial roles, for text that is not an element of its own
+
+// The largest type on a page: a cover line, a slide's one idea.
+.t-display {
+  font-family: var(--font-display);
+  font-size: var(--step-6);
+  font-weight: 600;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+// The kicker (eyebrow): a short label above a headline, naming the section or story.
+.t-kicker {
+  font-family: var(--font-meta);
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: var(--leading-meta);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+// The standfirst (lead): the sentence or two under a headline that says what the piece is about.
+.t-standfirst {
+  font-family: var(--font-text);
+  font-size: var(--step-1);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+// The pull quote: a line lifted from the text, set large.
+.t-pullquote {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  font-style: italic;
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+// The byline and dateline: who wrote it, and when.
+.t-byline {
+  font-family: var(--font-meta);
+  font-size: var(--step--1);
+  line-height: var(--leading-meta);
+}
+
+// Fine print: notes, credits, legal lines.
+.t-fineprint {
+  font-family: var(--font-meta);
+  font-size: var(--step--2);
+  line-height: var(--leading-meta);
+}
+
+// A column of running text, at a readable line length.
+.t-measure {
+  max-inline-size: var(--measure);
+}

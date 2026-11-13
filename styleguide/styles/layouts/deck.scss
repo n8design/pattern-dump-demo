@@ -1,0 +1,50 @@
+// The deck: a cover and one slide per screen. Scrolling always comes to rest with a panel (the cover's or a
+// slide's) in the middle of the screen. A panel taller than the screen can still be scrolled through: browsers
+// let you move freely inside a snap area larger than the screen.
+:root:has(.deck) {
+  scroll-snap-type: y mandatory;
+}
+
+.deck-cover {
+  min-block-size: 100svh;
+  display: grid;
+  align-content: center;
+  padding-block: clamp(4.5rem, 12svh, 8rem);
+  padding-inline: clamp(1rem, 6vw, 8rem);
+}
+
+.deck-panel {
+  min-inline-size: 0;
+  max-inline-size: min(48rem, 100%);
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid var(--deck-glass-edge);
+  border-radius: var(--deck-glass-radius);
+  background: var(--deck-scrim);
+  box-shadow:
+    inset 0 1px 0 var(--deck-glass-sheen),
+    0 0.125rem 0.25rem var(--deck-glass-shadow),
+    0 1.5rem 4rem var(--deck-glass-shadow);
+  scroll-snap-align: center; // the deck snaps each panel to the middle of the screen
+}
+
+// Glass: the waves show through, blurred. Without backdrop-filter the panel keeps the scrim above.
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .deck-panel {
+    background: var(--deck-glass);
+    -webkit-backdrop-filter: var(--deck-glass-backdrop);
+    backdrop-filter: var(--deck-glass-backdrop);
+  }
+}
+
+.deck-eyebrow {
+  margin: 0;
+  color: var(--deck-accent);
+}
+
+.deck-title {
+  margin-block: calc(var(--rhythm) * 0.25) var(--rhythm);
+}
+
+.deck-standfirst {
+  margin: 0;
+}

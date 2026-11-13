@@ -1,0 +1,7 @@
+{
+  "key": "example",
+  "name": "A palette",
+  "note": "The building block every palette under foundations/colors renders with. Shown here without colours: the colours come with each palette, e.g. foundations/colors/retro.",
+  "sample": { "kicker": "How it works", "headline": "One component, one schema, one website" },
+  "hues": ["mustard", "ink"]
+}

@@ -1,1 +1,2 @@
-.page-title { margin-block: 0 1rem; line-height: 1.2; }
+// Type comes from the base layer (h1); the body keeps a readable line length.
+.page-body { max-inline-size: var(--measure); }

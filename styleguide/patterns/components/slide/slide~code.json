@@ -1,0 +1,5 @@
+{
+  "eyebrow": "09 · Getting started",
+  "heading": "Two commands",
+  "text": "<pre><code>npx pattern-dump init --storefront\nnpm run dev</code></pre><p>The website and its workbench open side by side.</p>"
+}

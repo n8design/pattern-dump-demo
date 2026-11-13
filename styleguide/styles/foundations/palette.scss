@@ -1,0 +1,30 @@
+// The layout of a palette: sample, ramps, swatches. Its colours come from each palette pattern's stylesheet.
+.palette { font-family: var(--font-meta); }
+.palette-name { margin-block-start: 0; }
+.palette-note { max-inline-size: var(--measure); }
+
+.palette-sample { padding: clamp(1.5rem, 4vi, 3rem); margin-block-end: var(--rhythm); }
+.palette-sample-kicker { margin: 0 0 0.5rem; }
+.palette-sample-headline {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-size: var(--step-5);
+  font-weight: 600;
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+.palette-sample-bar { display: flex; block-size: 1rem; }
+.palette-sample-bar > span { flex: 1; }
+.palette-sample::after { content: var(--label); display: block; margin-block-start: 0.75rem; font-size: var(--step--2); }
+
+.ramp { margin-block-end: 1rem; }
+.ramp-name { margin: 0 0 0.25rem; font-size: var(--step--1); font-weight: 600; }
+.ramp-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: 2px; }
+// A swatch's colour is its content, so it keeps it in forced colours mode; its text colour is set with it.
+.swatch, .palette-sample, .palette-sample-bar > span { forced-color-adjust: none; }
+.swatch { padding: 0.5rem; min-block-size: 4.5rem; font-size: var(--step--2); line-height: 1.3; font-variant-numeric: tabular-nums; }
+.swatch::after { content: var(--label); white-space: pre; }
+.swatch-step { display: block; font-weight: 700; }
+.swatch-seed { outline: 2px solid currentColor; outline-offset: -4px; }
+

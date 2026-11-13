@@ -6,17 +6,23 @@
   "type": "module",
   "files": [
     "patterns",
-    "styles"
+    "styles",
+    "data",
+    "scripts"
   ],
   "patternDump": {
     "patterns": "patterns",
     "styles": {
       "dir": "styles",
-      "documentBase": ["base"]
-    }
+      "documentBase": [
+        "base"
+      ]
+    },
+    "data": "data",
+    "scripts": "scripts"
   },
   "scripts": {
-    "dev": "pd dev",
+    "dev": "pd dev --port 4300",
     "build": "pd build"
   },
   "devDependencies": {

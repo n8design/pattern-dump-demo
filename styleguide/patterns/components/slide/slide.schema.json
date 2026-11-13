@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Slide",
+  "description": "One idea on one screen. On a page: <pd-components-slide eyebrow=\"…\" heading=\"…\">text</pd-components-slide>.",
+  "type": "object",
+  "required": ["heading", "text"],
+  "x-pd-content": "text",
+  "properties": {
+    "eyebrow": { "type": "string", "description": "A short line above the headline: where the slide sits in the story" },
+    "heading": { "type": "string", "description": "The slide's one idea, as its headline" },
+    "text": { "type": "string", "contentMediaType": "text/markdown", "description": "The slide's content: the tag's content, as markdown" }
+  }
+}

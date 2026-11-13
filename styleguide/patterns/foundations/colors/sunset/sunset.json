@@ -1,0 +1,10 @@
+{
+  "key": "sunset",
+  "name": "Sunset",
+  "note": "Layered waves from aubergine and plum through magenta and crimson to orange, amber and sand. Text: cream (sand 50) on the dark half, night (a deep aubergine) on the light half.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": ["aubergine", "plum", "magenta", "crimson", "flame", "orange", "amber", "sand", "night"]
+}

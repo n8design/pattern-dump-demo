@@ -1,0 +1,49 @@
+// The typographic scale: a fluid modular scale. Emits no CSS; @use it where needed.
+//
+// Small screens get a gentle ratio (minor third, 1.2) so headlines don't crowd a narrow column; wide screens
+// get a steeper one (perfect fourth, 1.333) so the hierarchy opens up as the page does. Between the two
+// viewport widths every step grows linearly, and it stops growing outside them.
+//
+// Every step is clamp(<rem>, <rem> + <vi>, <rem>): rem keeps the user's browser font size in charge, and the
+// largest size of a step is never more than 2.5 times its smallest, so browser zoom can still take text to
+// 200% (WCAG 1.4.4). The build stops if a step breaks that rule.
+@use "sass:math";
+
+// Viewport range, in rem (360px to 1440px at the browser's default 16px).
+$min-viewport: 22.5;
+$max-viewport: 90;
+
+// Body text size and ratio at each end of the range.
+$min-base: 1.0625; // 17px
+$max-base: 1.25; // 20px
+$min-ratio: 1.2; // minor third
+$max-ratio: 1.333; // perfect fourth
+
+// The steps the scale has: -2 (fine print) to 6 (display).
+$steps: (-2, -1, 0, 1, 2, 3, 4, 5, 6);
+
+@function -round($value) {
+  @return math.div(math.round($value * 10000), 10000);
+}
+
+// A size growing from $min (rem, at $min-viewport) to $max (rem, at $max-viewport).
+@function fluid($min, $max) {
+  $lo: math.min($min, $max);
+  $hi: math.max($min, $max);
+  @if $hi > $lo * 2.5 {
+    @error "Type scale: #{$hi}rem is more than 2.5 times #{$lo}rem, so zoom could not reach 200%.";
+  }
+  $slope: math.div($max - $min, $max-viewport - $min-viewport);
+  $intercept: $min - $slope * $min-viewport;
+  @return clamp(#{-round($lo)}rem, #{-round($intercept)}rem + #{-round($slope * 100)}vi, #{-round($hi)}rem);
+}
+
+// The size of step $n. Steps below body text keep the gentle ratio at both ends: with the steep one,
+// captions and fine print would get smaller on wide screens while the body text grows.
+@function step($n) {
+  $max-step-ratio: $max-ratio;
+  @if $n < 0 {
+    $max-step-ratio: $min-ratio;
+  }
+  @return fluid($min-base * math.pow($min-ratio, $n), $max-base * math.pow($max-step-ratio, $n));
+}

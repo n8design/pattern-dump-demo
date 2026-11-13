@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Deck",
+  "description": "A page as a slide deck: a cover, then one slide per screen over the Sunset waves. A page uses it with layout: deck.",
+  "type": "object",
+  "required": ["title"],
+  "properties": {
+    "title": { "type": "string", "description": "The cover's headline, the page's title in the navigation and in search results" },
+    "eyebrow": { "type": "string", "description": "A short line above the cover's headline" },
+    "description": { "type": "string", "description": "The cover's standfirst, and the page's description for search results" }
+  }
+}

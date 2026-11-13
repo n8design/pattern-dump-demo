@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// Retro stripes: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("retro", $ground: ("ink", "seed"), $text: ("ink", 100), $kicker: ("mustard", "seed")) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// Copper teal: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("copper-teal", $ground: ("pine", "seed"), $text: ("straw", "seed"), $kicker: ("copper", 300)) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

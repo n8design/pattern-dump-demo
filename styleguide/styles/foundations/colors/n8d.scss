@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// N8D: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("n8d", $ground: ("ink", "seed"), $text: ("yellow", "seed"), $kicker: ("pink", 400)) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

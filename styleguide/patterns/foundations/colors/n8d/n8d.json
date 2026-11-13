@@ -1,0 +1,18 @@
+{
+  "key": "n8d",
+  "name": "N8D",
+  "note": "Stefan's brand colours: blue, teal, pink, red, yellow and green on near-black. Values read from a screenshot, so approximate.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "blue",
+    "teal",
+    "pink",
+    "red",
+    "yellow",
+    "green",
+    "ink"
+  ]
+}

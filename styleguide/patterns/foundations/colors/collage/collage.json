@@ -1,0 +1,17 @@
+{
+  "key": "collage",
+  "name": "Collage",
+  "note": "Coral, pink, lilac, sky and butter on cream: playful, many colours at once.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "coral",
+    "pink",
+    "lilac",
+    "sky",
+    "butter",
+    "cream"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "key": "copper-teal",
+  "name": "Copper teal",
+  "note": "Pine and deep teal grounds, copper as the warm accent, pale straw for type: calm, grown-up, still warm.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "pine",
+    "deep-teal",
+    "teal",
+    "copper",
+    "straw"
+  ]
+}

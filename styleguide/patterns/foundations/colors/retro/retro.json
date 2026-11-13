@@ -1,0 +1,20 @@
+{
+  "key": "retro",
+  "name": "Retro stripes",
+  "note": "A near-black ground, a warm run of stripes from mustard to slate, cream type, and a violet and lime shadow.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "mustard",
+    "orange",
+    "rust",
+    "rose",
+    "plum",
+    "slate",
+    "violet",
+    "lime",
+    "ink"
+  ]
+}

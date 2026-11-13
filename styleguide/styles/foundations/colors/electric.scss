@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// Electric: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("electric", $ground: ("cobalt", "seed"), $text: ("steel", 50), $kicker: ("sky", 200)) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

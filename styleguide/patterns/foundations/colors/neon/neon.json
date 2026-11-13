@@ -1,0 +1,16 @@
+{
+  "key": "neon",
+  "name": "Neon pop",
+  "note": "Hot and candy pink against acid and mint green, held together by black and white.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "hot-pink",
+    "candy",
+    "acid",
+    "mint",
+    "black"
+  ]
+}

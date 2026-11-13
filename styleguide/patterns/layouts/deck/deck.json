@@ -1,0 +1,8 @@
+{
+  "title": "Pattern Dump",
+  "eyebrow": "A tour in eleven slides",
+  "description": "How Pattern Dump turns components and markdown pages into a checked website.",
+  "body": "<section class=\"slide\"><div class=\"slide-panel\"><p class=\"slide-eyebrow t-kicker\">01 · The problem</p><h2 class=\"slide-heading\">Design systems and websites drift apart</h2><div class=\"slide-text\"><p>The page's slides follow the cover.</p></div></div></section>",
+  "site": { "title": "Pattern Dump demo" },
+  "nav": [{ "route": "/", "title": "Home", "current": true }]
+}

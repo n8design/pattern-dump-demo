@@ -1,0 +1,50 @@
+@use "scale";
+
+// Typography tokens, on every preview and every site page (the base layer).
+//
+// Font stacks use only fonts already on the reader's device; no font files are loaded.
+// Swapping in the design's own faces means changing these four lines.
+:root {
+  --font-text: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", P052, Georgia, serif;
+  --font-meta: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+
+  // The scale: --step--2 (fine print) to --step-6 (display). See _scale.scss.
+  @each $n in scale.$steps {
+    --step-#{$n}: #{scale.step($n)};
+  }
+
+  // Line heights, tighter as type grows.
+  --leading-display: 1.05;
+  --leading-heading: 1.15;
+  --leading-text: 1.55;
+  --leading-meta: 1.4;
+
+  // Tracking: large type closes up, small labels open up.
+  --tracking-display: -0.02em;
+  --tracking-heading: -0.01em;
+  --tracking-label: 0.08em;
+
+  // The line length of running text.
+  --measure: 65ch;
+
+  // The deck over the Sunset waves: cream type and an apricot eyebrow on night glass (or a night scrim), legible
+  // wherever the moving waves are.
+  --deck-ink: oklch(96.23% 0.044 88.1);
+  --deck-accent: oklch(88% 0.115 72);
+  --deck-scrim: oklch(16% 0.05 325.9 / 0.8);
+
+  // Glass panels: the same night, thinner, over a blurred and slightly richer view of the waves, with a light
+  // edge. 60 % night keeps the eyebrow at 4.9 : 1 and cream text at 6.5 : 1 even with sand, the lightest wave,
+  // right behind the panel. Without backdrop-filter the panels use the scrim instead.
+  --deck-glass: oklch(16% 0.05 325.9 / 0.6);
+  --deck-glass-backdrop: blur(3rem) saturate(1.6);
+  --deck-glass-edge: oklch(100% 0 0 / 0.16);
+  --deck-glass-sheen: oklch(100% 0 0 / 0.3);
+  --deck-glass-shadow: oklch(12% 0.04 325.9 / 0.45);
+  --deck-glass-radius: 1.5rem;
+
+  // One line of body text: the unit of vertical rhythm.
+  --rhythm: calc(var(--step-0) * var(--leading-text));
+}

@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// Mid-century: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("mid-century", $ground: ("terracotta", 700), $text: ("paper", 50), $kicker: ("sage", 100)) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

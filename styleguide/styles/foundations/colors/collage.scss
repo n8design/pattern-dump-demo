@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// Collage: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("collage", $ground: ("cream", "seed"), $text: ("coral", 950), $kicker: ("pink", 700)) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

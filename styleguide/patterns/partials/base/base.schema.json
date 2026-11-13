@@ -5,6 +5,11 @@
   "type": "object",
   "required": ["site"],
   "properties": {
+    "frame": {
+      "type": "string",
+      "enum": ["deck"],
+      "description": "Set by a layout, not a page: deck makes the frame full-screen, with the header over the first screen"
+    },
     "site": {
       "type": "object",
       "description": "Values every page shares: storefront.site in the site's config",

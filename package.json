@@ -1,0 +1,15 @@
+{
+  "name": "pattern-dump-demo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Pattern Dump demo: a style guide and a site, as npm workspaces.",
+  "workspaces": [
+    "styleguide",
+    "site"
+  ],
+  "scripts": {
+    "dev:styleguide": "npm run dev -w @pattern-dump-demo/styleguide",
+    "dev:site": "npm run dev -w @pattern-dump-demo/site",
+    "build": "npm run build -w @pattern-dump-demo/site"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "key": "electric",
+  "name": "Electric",
+  "note": "Cobalt and navy with a signal red: confident, sporty, high contrast.",
+  "sample": {
+    "kicker": "How it works",
+    "headline": "One component, one schema, one website"
+  },
+  "hues": [
+    "cobalt",
+    "navy",
+    "signal",
+    "sky",
+    "steel"
+  ]
+}

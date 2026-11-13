@@ -1,0 +1,10 @@
+@use "../swatches";
+
+// Neon pop: every swatch, and the sample's ground, headline and kicker.
+@each $selector, $declarations in swatches.rules("neon", $ground: ("mint", "seed"), $text: ("black", "seed"), $kicker: ("hot-pink", 800)) {
+  #{$selector} {
+    @each $property, $value in $declarations {
+      #{$property}: $value;
+    }
+  }
+}

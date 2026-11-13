@@ -1,0 +1,9 @@
+// The specimen's own layout. The sizes come from the base layer's tokens.
+.type-scale-row { padding-block: 0.75rem; border-block-end: 1px solid color-mix(in srgb, currentColor 15%, transparent); }
+.type-scale-meta { margin: 0 0 0.25rem; font-family: var(--font-meta); font-size: var(--step--1); }
+.type-scale-sample {
+  margin: 0;
+  font-family: var(--font-display);
+  line-height: var(--leading-heading);
+  overflow-wrap: anywhere;
+}

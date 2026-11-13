@@ -1,0 +1,26 @@
+<div class="waves" aria-hidden="true">
+  <svg class="waves-svg" viewBox="0 0 100 50" preserveAspectRatio="xMidYMid slice" focusable="false">
+    <defs>
+      <linearGradient id="waves-ground" x1="7.91" y1="-7.88" x2="46.91" y2="22.58" gradientUnits="userSpaceOnUse">
+        <stop offset="0" class="waves-ground-from"/>
+        <stop offset="1" class="waves-ground-to"/>
+      </linearGradient>
+      {{#each sunsetWaves.layers}}
+      <path id="waves-shape-{{@index}}" class="waves-shape" d="{{d}}"/>
+      {{/each}}
+    </defs>
+    <g class="waves-art">
+      <rect class="waves-ground" width="100" height="50" fill="url(#waves-ground)"/>
+      {{#each sunsetWaves.layers}}
+      <g class="waves-layer">
+        <g class="waves-shade">
+          {{#each @root.sunsetWaves.copies}}
+          <use href="#waves-shape-{{@../index}}" class="waves-copy" transform="translate({{x}} {{y}})" style="--mix: {{mix}}%; opacity: {{opacity}}"/>
+          {{/each}}
+        </g>
+        <use href="#waves-shape-{{@index}}" class="waves-fill"/>
+      </g>
+      {{/each}}
+    </g>
+  </svg>
+</div>

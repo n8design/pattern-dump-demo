@@ -1,0 +1,79 @@
+// Swatch and sample colours for one palette, generated from its seeds in base/_palettes.scss.
+//
+// `rules(…)` returns the rules as data (selector → declarations), and each palette's stylesheet writes them
+// with a short loop. The loop has to be in that stylesheet: Pattern Dump gives a CSS rule to the component
+// whose stylesheet the rule is written in, so rules written inside a mixin here would belong to no component
+// and land in the base layer of every page (see DEMO-GAPS.md, 2026-11-13).
+//
+//   @use "../swatches";
+//   @each $selector, $declarations in swatches.rules("retro", …) {
+//     #{$selector} { @each $property, $value in $declarations { #{$property}: $value; } }
+//   }
+@use "sass:map";
+@use "sass:math";
+@use "sass:list";
+@use "sass:string";
+@use "../base/palettes" as p;
+
+@function -ratio($a, $b) {
+  @return math.div(math.round(p.contrast($a, $b) * 10), 10);
+}
+
+// The ink that reads best on $c: white or black.
+@function -ink($c) {
+  @if p.contrast($c, p.$white) >= p.contrast($c, p.$black) {
+    @return p.css(p.$white);
+  }
+  @return p.css(p.$black);
+}
+
+// A CSS string, quotes included, ready to write as a custom property's value.
+@function -quoted($text) {
+  @return string.unquote('"' + $text + '"');
+}
+
+// A colour of the palette: (hue, step) or (hue, "seed").
+@function -pick($palette, $ref) {
+  $seed: map.get(p.$palettes, $palette, list.nth($ref, 1));
+  @if list.nth($ref, 2) == "seed" {
+    @return $seed;
+  }
+  @return p.ramp($seed, list.nth($ref, 2));
+}
+
+@function -swatch($c) {
+  @return (
+    "background": p.css($c),
+    "color": -ink($c),
+    "--label": -quoted("#{p.channels($c)}\\A W #{-ratio($c, p.$white)} · B #{-ratio($c, p.$black)}"),
+  );
+}
+
+// Every swatch of $palette, and its sample: $ground, $text and $kicker as (hue, step) or (hue, "seed").
+@function rules($palette, $ground, $text, $kicker) {
+  @if not map.has-key(p.$palettes, $palette) {
+    @error "No palette named \"#{$palette}\" in base/_palettes.scss.";
+  }
+  $rules: ();
+  @each $hue, $seed in map.get(p.$palettes, $palette) {
+    $rules: map.set($rules, ".swatch--#{$palette}-#{$hue}-seed", -swatch($seed));
+    @each $step, $_ in p.$steps {
+      $rules: map.set($rules, ".swatch--#{$palette}-#{$hue}-#{$step}", -swatch(p.ramp($seed, $step)));
+    }
+  }
+
+  $g: -pick($palette, $ground);
+  $t: -pick($palette, $text);
+  $k: -pick($palette, $kicker);
+  $rules: map.set(
+    $rules,
+    ".palette-sample--#{$palette}",
+    (
+      "background": p.css($g),
+      "color": p.css($t),
+      "--label": -quoted("Headline #{-ratio($t, $g)} : 1 · kicker #{-ratio($k, $g)} : 1"),
+    )
+  );
+  $rules: map.set($rules, ".palette-sample--#{$palette} .palette-sample-kicker", ("color": p.css($k)));
+  @return $rules;
+}

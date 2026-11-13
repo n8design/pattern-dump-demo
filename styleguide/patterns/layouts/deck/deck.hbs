@@ -1,0 +1,15 @@
+{{#> partials-base frame="deck" }}
+{{> components-waves }}
+{{!-- Storefront pages don't load a component's requireScript (pattern-dump 0.3.0, see DEMO-GAPS), so the layout loads the waves script itself. --}}
+<script type="module" src="/_pd/scripts/waves.js"></script>
+<div class="deck">
+  <section class="deck-cover">
+    <div class="deck-panel">
+      {{#if eyebrow}}<p class="deck-eyebrow t-kicker">{{eyebrow}}</p>{{/if}}
+      <h1 class="deck-title t-display">{{title}}</h1>
+      {{#if description}}<p class="deck-standfirst t-standfirst">{{description}}</p>{{/if}}
+    </div>
+  </section>
+  {{{body}}}
+</div>
+{{/partials-base}}

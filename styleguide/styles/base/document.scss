@@ -1,3 +1,4 @@
 // The base layer (documentBase): document defaults under every preview and every site page.
+// Typography is in tokens.scss and typography.scss.
 *, *::before, *::after { box-sizing: border-box; }
-:where(body) { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; }
+:where(body) { margin: 0; }

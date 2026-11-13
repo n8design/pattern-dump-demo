@@ -1,0 +1,28 @@
+<section class="palette" aria-labelledby="palette-{{key}}">
+  <h2 class="palette-name" id="palette-{{key}}">{{name}}</h2>
+  <p class="palette-note">{{note}}</p>
+  <div class="palette-sample palette-sample--{{key}}">
+    <p class="t-kicker palette-sample-kicker">{{sample.kicker}}</p>
+    <p class="palette-sample-headline">{{sample.headline}}</p>
+    <div class="palette-sample-bar">{{#each hues}}<span class="swatch--{{../key}}-{{this}}-seed"></span>{{/each}}</div>
+  </div>
+  {{#each hues}}
+  <div class="ramp">
+    <p class="ramp-name">{{this}}</p>
+    <div class="ramp-steps">
+      <div class="swatch swatch-seed swatch--{{../key}}-{{this}}-seed"><span class="swatch-step">seed</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-50"><span class="swatch-step">50</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-100"><span class="swatch-step">100</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-200"><span class="swatch-step">200</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-300"><span class="swatch-step">300</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-400"><span class="swatch-step">400</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-500"><span class="swatch-step">500</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-600"><span class="swatch-step">600</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-700"><span class="swatch-step">700</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-800"><span class="swatch-step">800</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-900"><span class="swatch-step">900</span></div>
+      <div class="swatch swatch--{{../key}}-{{this}}-950"><span class="swatch-step">950</span></div>
+    </div>
+  </div>
+  {{/each}}
+</section>

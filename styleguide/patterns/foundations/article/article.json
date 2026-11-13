@@ -1,0 +1,18 @@
+{
+  "kicker": "How it works",
+  "headline": "One component, one schema, one website",
+  "standfirst": "Pattern Dump keeps a design system and the website built from it in step, and checks every page before it ships.",
+  "byline": "Pattern Dump demo · 13 November 2026",
+  "before": [
+    "A component is a folder: its markup, sample data, variants, docs, and a schema that says what it accepts. The workbench shows each one in every state, and updates the open preview as you save.",
+    "The website is markdown. Every file in the pages folder is a page, dressed by a layout from the design system, and every value a page gives a component is checked against that component's schema."
+  ],
+  "subhead": "A broken page doesn't ship",
+  "after": [
+    "Before the build writes anything, it checks every link, anchor and image, and runs an accessibility check on every page. One error, and nothing is written."
+  ],
+  "pullquote": "Change a value the schema doesn't allow, and the page tells you what is wrong, and where.",
+  "minorhead": "Where to start",
+  "closing": "Two commands start a project with a website, a starter skin and its workbench side by side.",
+  "fineprint": "Setup text for the type specimen; the site's real copy lives in its pages."
+}

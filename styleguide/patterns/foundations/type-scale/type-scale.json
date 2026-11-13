@@ -1,0 +1,14 @@
+{
+  "sample": "A component is a folder",
+  "steps": [
+    { "token": "--step-6", "role": "Display" },
+    { "token": "--step-5", "role": "h1" },
+    { "token": "--step-4", "role": "h2" },
+    { "token": "--step-3", "role": "Pull quote" },
+    { "token": "--step-2", "role": "h3" },
+    { "token": "--step-1", "role": "Standfirst, h4" },
+    { "token": "--step-0", "role": "Body text, h5, h6" },
+    { "token": "--step--1", "role": "Kicker, byline, caption" },
+    { "token": "--step--2", "role": "Fine print" }
+  ]
+}
