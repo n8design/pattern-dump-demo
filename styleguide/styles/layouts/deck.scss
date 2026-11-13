@@ -48,7 +48,7 @@
   margin: 0;
 }
 
-// Revealed out of the paper (see slide.scss): the cover is four screens tall too, its panel in the middle of
+// Revealed out of the paper (see slide.scss): the cover is --reveal-length screens tall too, its panel in the middle of
 // the screen until it slides back under the paper.
 .deck-rest {
   display: none;
@@ -66,7 +66,7 @@
 
 :root.waves-reveal .deck-cover {
   position: relative;
-  min-block-size: 400svh;
+  min-block-size: calc(var(--reveal-length) * 100svh); // tokens.scss
   align-content: start;
   padding-block: 0;
 }

@@ -42,6 +42,13 @@
   --deck-glass-backdrop: blur(3rem) saturate(1.6);
   --deck-glass-edge: oklch(100% 0 0 / 0.16);
   --deck-glass-sheen: oklch(100% 0 0 / 0.3);
+  // The deck's reveal (layouts/deck, scripts/waves.ts), to tune: how many screen heights of scrolling each slide
+  // takes, and how the card follows the scroll. Damping is the share of the remaining distance a card closes per
+  // frame (at 60 Hz, and the same per second at any rate): 1 follows the scroll exactly, 0.1 to 0.2 trails it
+  // softly and settles after the scroll stops. The easing of the slide applies on top of both.
+  --reveal-length: 3;
+  --reveal-damping: 1;
+
   // The cards' shadow falls like the paper's in the waves (components/waves): toward the upper left, over the
   // reach of the artwork's shifted copies (2.55 by 0.42 units), darkest at the edge and fading out. A unit is a
   // hundredth of the waves' picture, which covers the screen sliced: max(1vw, 2vh).

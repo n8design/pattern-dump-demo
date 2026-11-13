@@ -14,7 +14,7 @@
 // The reveal, on a page with cards (elements marked `data-waves-card`, each in its own section): the paper stays
 // where it is and the cards move. Where every card can be tucked (see layout()), the script turns on
 // `waves-reveal` on the root, and the deck's styles make every
-// section four screens tall with its card sticky in the middle of the screen. Each card lies between two layers:
+// section --reveal-length screens tall with its card sticky in the middle of the screen. Each card lies between two layers:
 // on the highest layer whose paper still overlaps it where it rests, so every layer above that one is clear of it
 // there. Tucked, the card is moved right, under the paper of those front layers, until only its left edge shows.
 // As its section comes in, it slides out (translate only) to where it rests; as the section leaves, it slides back
@@ -38,15 +38,25 @@ const REVEAL_FROM = "(min-width: 48rem)"; // narrower screens show too little of
 // Around a card, the paper also covers its shadow: at least this many CSS pixels, and five units of the picture
 // (the shadow reaches about four, tokens.scss).
 const COVER_MARGIN = 120;
-// Where the screen's middle is in a section (0 at its top, 1 at its bottom) when the card slides out and back.
-// Sections are four screens tall; the card stays in the middle of the screen (sticky) from 0.125 to 1 minus its
-// height over four screens, so to 0.8 at the least. Out over a long stretch, arriving before the middle; still
-// while it is read; back under over a long stretch too, before it moves on with the page.
-const OUT_FROM = 0.14, OUT_TO = 0.42, BACK_FROM = 0.54, BACK_TO = 0.78;
+// The reveal's two settings, CSS custom properties on the root (tokens.scss), read on every frame so they can be
+// tuned live: --reveal-length, screen heights per slide, and --reveal-damping, the share of the remaining distance
+// a card closes per frame at 60 Hz as it chases its place (1: it follows the scroll exactly).
+const LENGTH = { name: "--reveal-length", fallback: 3, min: 2 };
+const DAMPING = { name: "--reveal-damping", fallback: 1, min: 0.01 };
+
+// Where a card moves, in screens of scrolling from where the screen's middle meets the top of its section. The
+// card stays in the middle of the screen (sticky) from half a screen in until the section's end minus its own
+// height: with cards up to three quarters of a screen tall, from 0.5 to the length minus 0.75. Of that stretch
+// (less a twentieth of a screen at each end): out over the first 42 %, still for 18 %, back under over the rest.
+function phases(length: number) {
+  const from = 0.55, to = length - 0.8, w = to - from;
+  return { outFrom: from, outTo: from + 0.42 * w, backFrom: from + 0.6 * w, backTo: to };
+}
 
 interface Copy { dx: number; dy: number; mix: number; opacity: number }
-// depth: the layer the card lies on (-2 until measured); tuck: how far right, in CSS pixels, it moves to hide.
-interface Card { el: HTMLElement; section: HTMLElement; depth: number; tuck: number }
+// depth: the layer the card lies on (-2 until measured); tuck: how far right, in CSS pixels, it moves to hide;
+// shown: where it is now, in CSS pixels right of its place, as it chases where the scroll puts it.
+interface Card { el: HTMLElement; section: HTMLElement; depth: number; tuck: number; shown?: number }
 type Point = { x: number; y: number };
 
 const root = document.querySelector<HTMLElement>(".waves");
@@ -208,17 +218,24 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
   let cards: Card[] = [];
   let laidOut = "";
   const sectionOf = (el: HTMLElement) => (el.closest("section") ?? el.parentElement) as HTMLElement;
-  const driftIn = (section: HTMLElement, ats: number[]) => {
-    const top = scrollY + section.getBoundingClientRect().top, height = section.offsetHeight;
-    return ats.map((at) => driftAt(progressAt(top + at * height - innerHeight / 2)));
+  // The drift of the paper at points of a section, in screens from where the screen's middle meets its top.
+  const driftIn = (section: HTMLElement, screens: number[]) => {
+    const top = scrollY + section.getBoundingClientRect().top;
+    return screens.map((s) => driftAt(progressAt(top + s * innerHeight - innerHeight / 2)));
   };
+  const setting = (s: { name: string; fallback: number; min: number }, max = Infinity) => {
+    const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue(s.name));
+    return Number.isFinite(v) ? Math.min(max, Math.max(s.min, v)) : s.fallback;
+  };
+  let length = setting(LENGTH);
   // Per screen size: the reveal is on only if every card can tuck under paper with its edge still on screen (a
   // narrow or tall screen shows too little of the artwork for some cards). Otherwise the deck stays as it is
   // without the script, so it never half works. The cards are measured with the reveal's layout in place.
   function layout(): void {
     if (!canReveal) return;
     const v = view();
-    const key = `${v.w}x${v.h}`;
+    length = setting(LENGTH);
+    const key = `${v.w}x${v.h}x${length}`;
     if (key === laidOut) return;
     laidOut = key;
     const html = document.documentElement;
@@ -243,13 +260,14 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
     if (c.depth > -2) return c;
     const spot = restingSpot(c.el);
     // The layer it lies on: the highest whose paper overlaps it anywhere while it rests.
-    const resting = driftIn(c.section, [OUT_TO, 0.5, BACK_FROM]);
+    const p = phases(length);
+    const resting = driftIn(c.section, [p.outTo, (p.outTo + p.backFrom) / 2, p.backFrom]);
     c.depth = -1;
     for (let j = n - 1; j >= 0 && c.depth < 0; j--)
       if (resting.some((off) => spot.points.some((p) => covers(j, p.x - off[j].x, p.y - off[j].y)))) c.depth = j;
     // Tucked: moved right until the paper of the layers above covers all of it but its left edge, wherever it
     // tucks (as it comes in and as it leaves). A card that no paper can hide simply rests on top.
-    const moving = driftIn(c.section, [OUT_FROM, BACK_TO]);
+    const moving = driftIn(c.section, [p.outFrom, p.backTo]);
     const hidden = (t: number) => moving.every((off) => spot.points.every((p) => p.share < SHOW_EDGE ||
       Array.from({ length: n - 1 - c.depth }, (_, i) => c.depth + 1 + i).some((j) => covers(j, p.x + t - off[j].x, p.y - off[j].y))));
     let tuck = 0;
@@ -263,31 +281,47 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
   }
 
   let drawn = "";
+  let lastFrame = performance.now();
+  let wasChasing = false;
 
-  function draw(): void {
+  function draw(now = performance.now()): void {
+    // The time since the last frame, while cards are chasing; the first frame after a pause counts as one frame,
+    // so a card doesn't leap by the length of the pause.
+    const elapsed = wasChasing ? Math.min(100, Math.max(0, now - lastFrame)) : 1000 / 60;
+    lastFrame = now;
     // At most two device pixels per CSS pixel: the waves are soft, and it halves the work on 3× screens.
     const ratio = Math.min(devicePixelRatio, 2);
     const v = view();
     const w = Math.round(v.w * ratio), h = Math.round(v.h * ratio);
     const progress = progressAt(scrollY);
-    const key = `${w}x${h}@${scrollY}`;
+    const key = `${w}x${h}@${scrollY}x${setting(LENGTH)}`;
     if (key === drawn || !w || !h) return;
     drawn = key;
     if (offscreen.width !== w || offscreen.height !== h) { offscreen.width = w; offscreen.height = h; }
 
     const offsets = driftAt(progress);
+    let chasing = false;
     layout();
     if (reveal) {
       // Each card in a section on screen: out from under the paper once it rests, back under before it leaves.
       // The first card starts out and the last one stays out.
-      // Every card is placed on every frame, so none is ever left where an earlier frame put it.
+      // Every card is placed on every frame, so none is ever left where an earlier frame put it. With damping, a
+      // card chases its place: per frame it closes a share of the distance that left, scaled by the time the frame
+      // took, so it moves the same at 60 and 120 Hz; frames keep coming until every card has caught up.
+      const p = phases(length);
+      const damping = setting(DAMPING, 1);
+      const share = damping >= 1 ? 1 : 1 - (1 - damping) ** (elapsed / (1000 / 60));
       cards.forEach((c, i) => {
         const r = c.section.getBoundingClientRect();
-        const at = (innerHeight / 2 - r.top) / r.height;
-        const coming = i === 0 ? 1 : settle((at - OUT_FROM) / (OUT_TO - OUT_FROM));
-        const going = i === cards.length - 1 ? 1 : settle(1 - (at - BACK_FROM) / (BACK_TO - BACK_FROM));
-        const out = Math.min(coming, going);
-        c.el.style.setProperty("--waves-tuck", `${(measure(c).tuck * (1 - out)).toFixed(2)}px`);
+        const at = (innerHeight / 2 - r.top) / innerHeight;
+        const coming = i === 0 ? 1 : settle((at - p.outFrom) / (p.outTo - p.outFrom));
+        const going = i === cards.length - 1 ? 1 : settle(1 - (at - p.backFrom) / (p.backTo - p.backFrom));
+        const target = measure(c).tuck * (1 - Math.min(coming, going));
+        let shown = c.shown === undefined ? target : c.shown + (target - c.shown) * share;
+        if (Math.abs(target - shown) < 0.05) shown = target;
+        else chasing = true;
+        c.shown = shown;
+        c.el.style.setProperty("--waves-tuck", `${shown.toFixed(2)}px`);
       });
     }
 
@@ -300,7 +334,7 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
     gl!.uniform1i(uFront, -1);
     gl!.drawArrays(gl!.TRIANGLES, 0, 3);
     behindCtx.transferFromImageBitmap(offscreen.transferToImageBitmap());
-    if (!reveal) return;
+    if (!reveal) { wasChasing = false; return; }
 
     // Over the cards: the layers in front of each card's own layer, clipped to the card and its shadow. Where the
     // card has slid out from under them, they don't reach it, and nothing is drawn over it.
@@ -323,10 +357,14 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<void> {
       gl!.drawArrays(gl!.TRIANGLES, 0, 3);
     }
     overCtx!.transferFromImageBitmap(offscreen.transferToImageBitmap());
+    wasChasing = chasing;
+    if (chasing) { drawn = ""; request(); }
   }
 
   let queued = false;
-  const request = () => { if (!queued) { queued = true; requestAnimationFrame(() => { queued = false; draw(); }); } };
+  function request(): void {
+    if (!queued) { queued = true; requestAnimationFrame((t) => { queued = false; draw(t); }); }
+  }
   draw();
   root.classList.add("waves-live");
   addEventListener("scroll", request, { passive: true });

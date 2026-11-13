@@ -11,7 +11,7 @@ through the slides as they scroll any page. As the page scrolls, the waves drift
 content rises in.
 
 **Revealed out of the paper**, where the waves script draws (WebGL 2, motion welcome): each slide, and the
-cover, becomes four screens tall and its card stays in the middle of the screen while the slide is active. The
+cover, becomes `--reveal-length` screens tall (3 by default) and its card stays in the middle of the screen while the slide is active. The
 paper stays where it is; the card starts tucked under the edge of a layer in front, with only its left edge
 showing, slides out to the middle over a long stretch of scrolling, settling like paper, rests on top and holds still
 while it is read, and slides back under as the slide leaves. Snapping is off while the cards are revealed, so
@@ -19,3 +19,8 @@ the movement follows the scroll. Every movement follows the scroll position, so 
 card starts out and the last stays out. The reveal is on only where every card can tuck with its edge on screen
 (not below 48rem, and not on screens whose proportions leave too little of the artwork); otherwise, and without
 the script, each slide is one screen and the cards simply scroll past.
+
+**Tuning**: two custom properties in `styles/base/tokens.scss`. `--reveal-length` is the screen heights of
+scrolling per slide; `--reveal-damping` is how the card follows the scroll, the share of the remaining distance it
+closes per frame (1 follows exactly; 0.1 to 0.2 trails softly and settles after the scroll stops, the same at 60
+and 120 Hz). Both can be changed live in the browser's dev tools, on `:root`.

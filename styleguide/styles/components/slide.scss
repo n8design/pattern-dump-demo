@@ -41,7 +41,7 @@
 }
 
 // Revealed out of the paper (scripts/waves.ts turns on `waves-reveal` where it draws the waves): each slide is
-// four screens tall and its panel stays in the middle of the screen while the slide is active; the script slides
+// --reveal-length screens tall and its panel stays in the middle of the screen while the slide is active; the script slides
 // it out from under the paper and back as the page scrolls, holding it still in between. Without the script the
 // slide stays one screen tall, as above.
 .slide-rest {
@@ -50,7 +50,7 @@
 
 :root.waves-reveal .slide {
   position: relative;
-  min-block-size: 400svh;
+  min-block-size: calc(var(--reveal-length) * 100svh); // tokens.scss
   align-content: start;
   padding-block: 0;
 }
