@@ -9,6 +9,10 @@
 // The focus stays put during the tour, so a screen reader isn't interrupted at every card: when the tour ends or
 // stops, the headline of the card it last reached takes the focus (without scrolling). With reduced motion the
 // page jumps to the first slide and nothing moves on by itself.
+//
+// Keyboard focus: in the reveal, a card can be partly under the paper at the scroll position the browser picks to
+// show a focused link. So when keyboard focus lands in a card (Tab, Shift+Tab), the page scrolls on to where that
+// card rests, out from under the paper, and the focused element is never hidden by it.
 
 const link = document.querySelector<HTMLAnchorElement>("a[data-deck-more]");
 
@@ -16,6 +20,21 @@ const link = document.querySelector<HTMLAnchorElement>("a[data-deck-more]");
 if (link && link.dataset.deckMore !== "on") {
   link.dataset.deckMore = "on";
   link.addEventListener("click", follow);
+}
+
+if (document.documentElement.dataset.deckFocus !== "on") {
+  document.documentElement.dataset.deckFocus = "on";
+  addEventListener("focusin", (event) => {
+    const target = event.target as HTMLElement;
+    if (running || !target.matches(":focus-visible")) return;
+    const section = target.closest<HTMLElement>("section[data-waves-rest]");
+    const rest = Number(section?.dataset.wavesRest);
+    if (!section || !Number.isFinite(rest)) return;
+    // After the browser's own scroll to the focused element, which would otherwise cut this one short.
+    requestAnimationFrame(() => {
+      if (Math.abs(scrollY - rest) > 1) scrollTo({ top: rest });
+    });
+  });
 }
 
 const STOPPERS = ["wheel", "touchstart", "pointerdown", "keydown"] as const;

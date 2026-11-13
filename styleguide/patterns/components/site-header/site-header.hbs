@@ -1,8 +1,11 @@
 <header class="site-header">
   <a class="site-header-title" href="/">{{site.title}}</a>
   <nav class="site-header-nav" aria-label="Site">
-    <ul>
-      {{#each nav}}<li><a href="{{route}}"{{#if current}} aria-current="page"{{/if}}>{{title}}</a></li>{{/each}}
+    <button class="site-header-menu" type="button" popovertarget="site-menu" aria-controls="site-menu"><span class="site-header-menu-icon" aria-hidden="true"></span><span>Menu</span></button>
+    <ul id="site-menu" class="site-header-list" popover="auto">
+      {{#if site.navigations.main}}{{#each site.navigations.main}}<li><a href="{{#if route}}{{route}}{{else}}{{href}}{{/if}}"{{#if current}} aria-current="page"{{/if}}>{{label}}</a></li>{{/each}}{{else}}{{#each nav}}<li><a href="{{route}}"{{#if current}} aria-current="page"{{/if}}>{{title}}</a></li>{{/each}}{{/if}}
     </ul>
   </nav>
 </header>
+{{!-- A classic script, right after the header, so the links show in a row or behind the menu button from the first paint (scripts/site-header.ts). --}}
+<script src="/_pd/scripts/site-header.js"></script>

@@ -16,6 +16,13 @@
       "required": ["title"],
       "properties": {
         "title": { "type": "string", "description": "The site's name, in the header" },
+        "navigations": {
+          "type": "object",
+          "description": "Named link lists; their shape is Pattern Dump's (storefront.site.navigations)",
+          "properties": {
+            "main": { "description": "The header's links (components/site-header); without it, every page" }
+          }
+        },
         "footer": {
           "type": "object",
           "description": "The footer's links (components/site-footer); a part left out isn't shown",
@@ -27,15 +34,6 @@
               "properties": {
                 "title": { "type": "string" },
                 "href": { "type": "string", "format": "uri" }
-              }
-            },
-            "styleguide": {
-              "type": "object",
-              "description": "The design system the site is built from, linking to its workbench",
-              "required": ["title", "href"],
-              "properties": {
-                "title": { "type": "string" },
-                "href": { "type": "string" }
               }
             },
             "author": {

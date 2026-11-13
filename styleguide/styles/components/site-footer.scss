@@ -1,6 +1,6 @@
 // The site footer (components/site-footer): a line at the end of every page, after the content (partials/base).
 .site-footer {
-  padding-block: 1.5rem;
+  padding-block: 0.75rem;
   border-block-start: 1px solid color-mix(in oklch, CanvasText 15%, transparent);
   font-family: var(--font-meta);
   font-size: var(--step--1);
@@ -15,11 +15,11 @@
   text-underline-offset: 0.2em;
 }
 
-// In the deck: full width, on the header's glass over the waves, cream type. Above the paper over the cards
-// (components/waves), as the header is.
+// In the deck: full width, on the header's glass over the waves, cream type. Where the deck snaps from card to card
+// (layouts/deck), the footer is a snap point too, at the page's end; otherwise snapping would hold the page on the
+// last card, and the footer could never be scrolled or tabbed to.
 .site--deck .site-footer {
-  position: relative;
-  z-index: 2;
+  scroll-snap-align: end;
   padding-inline: clamp(1rem, 6vw, 8rem);
   border-block-start: 1px solid var(--deck-glass-edge);
   background: var(--deck-scrim);
@@ -42,4 +42,19 @@
   outline: 2px solid var(--deck-accent);
   outline-offset: 0.2em;
   border-radius: 0.2em;
+}
+
+// In the deck's reveal (scripts/waves.ts turns on `waves-reveal` at the widths where the cards tuck under the
+// paper), the footer stays on screen at the bottom while the cards come and go (sticky), and still takes its own
+// place at the very end, so nothing is left under it there. Above the paper over the cards, as the header is. The
+// scroll padding keeps a focused or linked element clear of it. Elsewhere (articles, narrow screens, without the
+// script) it's an ordinary footer at the end of the page.
+:root.waves-reveal:has(.deck) {
+  scroll-padding-block-end: 5rem; // the footer's height, with room to spare
+}
+
+:root.waves-reveal .site--deck .site-footer {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 2;
 }

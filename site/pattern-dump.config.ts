@@ -17,11 +17,18 @@ export default defineConfig({
     workbenchUrl: "/styleguide/",
     site: {
       title: "Pattern Dump demo",
+      // The header's links (components/site-header): the pages, then this site's style guide (workbenchUrl).
+      navigations: {
+        main: [
+          { page: "index.md" },
+          { page: "style-guides.md" },
+          { href: "/styleguide/", label: "This style guide" },
+        ],
+      },
       // The footer's links (components/site-footer in the style guide).
       footer: {
         project: { title: "Pattern Dump", href: "https://github.com/n8design/pattern-dump" },
         author: { name: "Stefan Bauer", href: "https://github.com/StfBauer" },
-        styleguide: { title: "the style guide", href: "/styleguide/" },
       },
     },
   },

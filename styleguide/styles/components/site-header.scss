@@ -11,8 +11,7 @@
   inset-inline: 0;
   z-index: 2; // above the deck's paper over the cards (components/waves)
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 1rem;
+  gap: 1rem;
   align-items: center;
   justify-content: space-between;
   min-block-size: var(--site-header-size);
@@ -28,9 +27,13 @@
   text-decoration: none;
 }
 
-.site-header-nav ul {
-  display: flex;
-  gap: 1rem;
+// The row keeps its natural width, so the script can tell whether it fits (scripts/site-header.ts).
+.site-header > * {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.site-header-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -46,6 +49,73 @@
   text-underline-offset: 0.25em;
 }
 
+// Collapsed (the default, and without script): a Menu button, and the links in a popover below the header, at the
+// right. Light dismiss and Escape come with the popover.
+.site-header-menu {
+  display: inline-flex;
+  gap: 0.5em;
+  align-items: center;
+  padding: 0.4em 0.9em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+// Three bars, drawn with the text colour.
+.site-header-menu-icon {
+  inline-size: 1em;
+  block-size: 0.7em;
+  background:
+    linear-gradient(currentColor 0 0) top / 100% 2px no-repeat,
+    linear-gradient(currentColor 0 0) center / 100% 2px no-repeat,
+    linear-gradient(currentColor 0 0) bottom / 100% 2px no-repeat;
+}
+
+.site-header-menu:focus-visible,
+.site-header-nav a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 0.2em;
+}
+
+.site-header-list[popover] {
+  position: fixed;
+  inset: auto;
+  inset-block-start: calc(var(--site-header-size) + 0.5rem);
+  inset-inline-end: 1rem;
+  inline-size: min(80dvw, 20rem);
+  max-block-size: calc(100dvh - var(--site-header-size) - 2rem);
+  overflow: auto;
+  margin: 0;
+  padding: 0.5rem;
+  border: 1px solid color-mix(in oklch, CanvasText 15%, transparent);
+  border-radius: 0.75rem;
+  background: Canvas;
+  color: CanvasText;
+}
+
+.site-header-list[popover] a {
+  display: block;
+  padding: 0.6rem 0.75rem; // a comfortable target to tap
+}
+
+// Wide: the whole row fits, so the button goes and the links sit in the row.
+.site-header.is-wide .site-header-menu {
+  display: none;
+}
+
+.site-header.is-wide .site-header-list {
+  display: flex;
+  gap: 1rem;
+}
+
+// While the script measures, nothing animates.
+.site-header.is-measuring * {
+  transition: none !important;
+}
+
 // In the deck: full width, on the cards' glass over the waves, cream type.
 .site--deck .site-header {
   padding-inline: clamp(1rem, 6vw, 8rem);
@@ -55,8 +125,26 @@
   color: var(--deck-ink);
 }
 
+// The menu in the deck: on the night scrim, in a layer of its own above the page, cream type.
+.site--deck .site-header-list[popover] {
+  border-color: var(--deck-glass-edge);
+  background: var(--deck-scrim);
+  color: var(--deck-ink);
+}
+
+.site--deck .site-header-menu:hover,
+.site--deck .site-header-nav a:hover {
+  color: var(--deck-accent);
+}
+
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
   .site--deck .site-header {
+    background: var(--deck-glass);
+    -webkit-backdrop-filter: var(--deck-glass-backdrop);
+    backdrop-filter: var(--deck-glass-backdrop);
+  }
+
+  .site--deck .site-header-list[popover] {
     background: var(--deck-glass);
     -webkit-backdrop-filter: var(--deck-glass-backdrop);
     backdrop-filter: var(--deck-glass-backdrop);

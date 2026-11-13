@@ -27,6 +27,11 @@ scrolling per slide; `--reveal-damping` is how the card follows the scroll, the 
 closes per frame (1 follows exactly; 0.1 to 0.2 trails softly and settles after the scroll stops, the same at 60
 and 120 Hz). Both can be changed live in the browser's dev tools, on `:root`.
 
+**Keyboard focus** in the reveal: where the browser scrolls to show a focused link, its card can still be partly
+under the paper. So when keyboard focus lands in a card, the `deck` script scrolls on to where the card rests,
+out from under the paper; a click never moves the page. Where the deck snaps from card to card (no reveal), the
+footer has a snap point of its own, so the page can reach it.
+
 **Learn more**: with `more` (the link's text) and `moreTarget` (a slide's `anchor`) in the frontmatter, the cover
 gets a link to that slide. Without JavaScript it is an ordinary link to the slide's headline (smooth only where
 motion is welcome). With the `deck` script it starts a tour through that slide and every one after it. It
