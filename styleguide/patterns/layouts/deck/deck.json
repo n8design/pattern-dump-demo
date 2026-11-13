@@ -4,7 +4,17 @@
   "description": "How Pattern Dump turns components and markdown pages into a checked website.",
   "body": "<section class=\"slide\"><span class=\"slide-rest\" aria-hidden=\"true\"></span><div class=\"slide-panel\" data-waves-card><p class=\"slide-eyebrow t-kicker\">01 · The problem</p><h2 class=\"slide-heading\" id=\"the-problem\">Design systems and websites drift apart</h2><div class=\"slide-text\"><p>The page's slides follow the cover, each one a slide component.</p></div></div></section><section class=\"slide\"><span class=\"slide-rest\" aria-hidden=\"true\"></span><div class=\"slide-panel\" data-waves-card><p class=\"slide-eyebrow t-kicker\">02 · The reveal</p><h2 class=\"slide-heading\">Each card comes out of the paper</h2><div class=\"slide-text\"><p>Scroll on: this card slides back under the paper, the next one slides out.</p></div></div></section><section class=\"slide\"><span class=\"slide-rest\" aria-hidden=\"true\"></span><div class=\"slide-panel\" data-waves-card><p class=\"slide-eyebrow t-kicker\">03 · The end</p><h2 class=\"slide-heading\">The last card stays out</h2><div class=\"slide-text\"><p>Scroll back to play it all in reverse.</p></div></div></section>",
   "site": {
-    "title": "Pattern Dump demo"
+    "title": "Pattern Dump demo",
+    "footer": {
+      "project": {
+        "title": "Pattern Dump",
+        "href": "https://github.com/n8design/pattern-dump"
+      },
+      "author": {
+        "name": "Stefan Bauer",
+        "href": "https://github.com/StfBauer"
+      }
+    }
   },
   "nav": [
     {

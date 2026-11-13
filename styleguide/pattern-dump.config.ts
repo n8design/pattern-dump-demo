@@ -9,6 +9,8 @@ export default defineConfig({
   styles: { strategy: "parallel", dir: "./styles" },
   documentBase: ["base"],
   dataDir: "./data",
+  // Images for pages and samples, served at /assets/images/ (the folder's name), as the package serves it too.
+  assets: { strategy: "central", dir: ["./media/images"] },
   scriptsDir: "./scripts",
   shell: {
     brand: { title: "Pattern Dump demo: style guide" },

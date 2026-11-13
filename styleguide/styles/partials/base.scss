@@ -7,6 +7,7 @@
   max-width: none;
   padding: 0;
   color: var(--deck-ink);
+  overflow-x: clip; // a card tucked under the paper reaches past the screen's right edge (scripts/waves.ts)
 }
 
 .site--deck .site-main { margin: 0; }

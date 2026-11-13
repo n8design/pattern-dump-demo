@@ -1,5 +1,8 @@
 <div class="site{{#if frame}} site--{{frame}}{{/if}}">
+  {{!-- Going from page to page (base/transitions.scss): leaving, the content takes its transition name just before the browser captures it; arriving, the cards stay hidden until the waves script has tucked them under the paper (scripts/waves.ts). Inline and first, so it listens before the page's first frame. --}}
+  <script>(function(d){addEventListener("pageswap",function(e){if(e.viewTransition)d.classList.add("page-leaving")});addEventListener("pagereveal",function(e){d.classList.remove("page-leaving");window.wavesArrival=e.viewTransition;if(e.viewTransition)d.classList.add("waves-entering")})})(document.documentElement)</script>
   {{> components-site-header }}
   {{!-- On one line: an indented, standalone partial include indents every line of its output, <pre> included. --}}
   <main class="site-main" id="main">{{> @partial-block }}</main>
+  {{> components-site-footer }}
 </div>

@@ -1,0 +1,48 @@
+// Going from page to page: a view transition between the two documents (same site only). Browsers without
+// cross-document view transitions, and anyone who asks for reduced motion, get the ordinary instant change.
+//
+// The paper stays: the waves and the paper over the cards (components/waves) hold still on layers of their own.
+// The old page's content (the element marked `data-page-content`, named as the page is left, partials/base) fades
+// out between them over --page-transition-duration (tokens.scss). The new page's content isn't named: it stays in
+// the page's own layer, under the waves, so nothing of it shows during the transition. When the transition ends,
+// the waves script slides its cards out from under the paper (scripts/waves.ts), or fades them in where they can't
+// tuck. The header (components/site-header) cross-fades on its own layer above everything.
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+:root.page-leaving [data-page-content] {
+  view-transition-name: content;
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--page-transition-duration);
+}
+
+// The page itself lies under the waves: nothing to animate.
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+// The old waves and paper stay until the end; the new page's own take over from there.
+::view-transition-old(waves),
+::view-transition-old(waves-paper) {
+  animation: none;
+}
+
+::view-transition-new(waves),
+::view-transition-new(waves-paper) {
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-old(content) {
+  animation: var(--page-transition-duration) ease-out both page-fade-out;
+}
+
+@keyframes page-fade-out {
+  to { opacity: 0; }
+}

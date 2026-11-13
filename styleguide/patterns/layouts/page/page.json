@@ -1,6 +1,30 @@
 {
-  "title": "A page",
-  "body": "<p>The page's markdown, rendered.</p>",
-  "site": { "title": "Pattern Dump demo" },
-  "nav": [{ "route": "/", "title": "Home", "current": true }]
+  "eyebrow": "Lorem ipsum",
+  "title": "Lorem ipsum dolor sit amet",
+  "description": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <a href=\"#\">Lorem ipsum link</a>, lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\n<p><img src=\"/assets/images/placeholder-16x9.png\" width=\"1600\" height=\"900\" alt=\"Placeholder image, 16:9\">\n<em>Lorem ipsum dolor sit amet: a caption under the image.</em></p>\n<h2>Lorem ipsum dolor sit amet</h2>\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>\n<ul><li>Lorem ipsum dolor sit amet</li><li>Consectetur adipiscing elit, sed do eiusmod</li><li>Tempor incididunt ut labore et dolore</li></ul>\n<blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit: a quotation set apart from the text.</p></blockquote>\n<h3>Ut enim ad minim veniam</h3>\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <code>lorem.ipsum()</code> lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\n<p><img src=\"/assets/images/placeholder-4x3.png\" width=\"1200\" height=\"900\" alt=\"Placeholder image, 4:3\">\n<em>Ut enim ad minim veniam: a second caption.</em></p>\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>",
+  "site": {
+    "title": "Pattern Dump demo",
+    "footer": {
+      "project": {
+        "title": "Pattern Dump",
+        "href": "https://github.com/n8design/pattern-dump"
+      },
+      "author": {
+        "name": "Stefan Bauer",
+        "href": "https://github.com/StfBauer"
+      }
+    }
+  },
+  "nav": [
+    {
+      "route": "/",
+      "title": "Home"
+    },
+    {
+      "route": "/style-guides/",
+      "title": "Style guides",
+      "current": true
+    }
+  ]
 }

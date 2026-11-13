@@ -1,6 +1,13 @@
-{{#> partials-base }}
-<article class="page">
-  <h1 class="page-title">{{title}}</h1>
+{{#> partials-base frame="deck" }}
+{{> components-waves }}
+{{!-- Storefront pages don't load a component's requireScript (pattern-dump 0.3.0, see DEMO-GAPS), so the layout loads the waves script itself. --}}
+<script type="module" src="/_pd/scripts/waves.js"></script>
+<article class="page" data-page-content data-waves-card="still">
+  <header class="page-head">
+    {{#if eyebrow}}<p class="page-eyebrow t-kicker">{{eyebrow}}</p>{{/if}}
+    <h1 class="page-title">{{title}}</h1>
+    {{#if description}}<p class="page-standfirst t-standfirst">{{description}}</p>{{/if}}
+  </header>
   <div class="page-body">{{{body}}}</div>
 </article>
 {{/partials-base}}

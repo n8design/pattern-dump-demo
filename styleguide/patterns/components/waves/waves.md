@@ -24,6 +24,12 @@ right under the paper of the layers above until only its left edge shows; the sc
 over the card, clipped to it, and slides the card out (translate only) as its section comes in. At rest none of
 them overlaps it, so it lies on top with nothing to switch. The deck layout (`layouts/deck`) says when this is on.
 
+**Going from page to page** (a view transition, `base/transitions.scss`), the paper stays: the waves and the
+paper over the cards hold still on layers of their own while the old page's content fades out. Then the new
+page's cards start tucked and slide out over `--page-enter-duration`, with the same easing. A card marked
+`data-waves-card="still"` (the page layout's article) rests where it is instead of in the middle of the screen:
+it only slides out on arrival. On narrow screens, or where a card can't tuck, the cards fade in instead.
+
 **Without WebGL 2**, without JavaScript, or with reduced motion, the SVG is the picture: the same artwork,
 still.
 

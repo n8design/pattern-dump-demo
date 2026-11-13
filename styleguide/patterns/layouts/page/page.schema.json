@@ -1,11 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Page",
-  "description": "The layout every page renders with. Its properties are what a page's frontmatter may set.",
+  "description": "A page of text over the Sunset waves, on the deck's glass: eyebrow, headline, standfirst and the page's markdown. Its properties are what a page's frontmatter may set.",
   "type": "object",
-  "required": ["title"],
+  "required": [
+    "title"
+  ],
+  "x-pd-prose-images": {
+    "widths": [
+      480,
+      960,
+      1440
+    ],
+    "sizes": "(min-width: 56rem) 44rem, calc(100vw - 4.5rem)",
+    "eager": 1
+  },
   "properties": {
-    "title": { "type": "string", "description": "The page's heading and its title in the navigation" },
-    "description": { "type": "string", "description": "The page's description for search results" }
+    "eyebrow": {
+      "type": "string",
+      "description": "A short line above the headline: what kind of page it is"
+    },
+    "title": {
+      "type": "string",
+      "description": "The page's heading and its title in the navigation"
+    },
+    "description": {
+      "type": "string",
+      "description": "The page's standfirst under the headline, and its description for search results"
+    }
   }
 }

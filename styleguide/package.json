@@ -8,7 +8,8 @@
     "patterns",
     "styles",
     "data",
-    "scripts"
+    "scripts",
+    "media"
   ],
   "patternDump": {
     "patterns": "patterns",
@@ -19,7 +20,10 @@
       ]
     },
     "data": "data",
-    "scripts": "scripts"
+    "scripts": "scripts",
+    "assets": [
+      "media/images"
+    ]
   },
   "scripts": {
     "dev": "pd dev --port 4300",

@@ -1,4 +1,10 @@
 {
-  "site": { "title": "Pattern Dump demo" },
+  "site": {
+    "title": "Pattern Dump demo",
+    "footer": {
+      "project": { "title": "Pattern Dump", "href": "https://github.com/n8design/pattern-dump" },
+      "author": { "name": "Stefan Bauer", "href": "https://github.com/StfBauer" }
+    }
+  },
   "nav": [{ "route": "/", "title": "Home", "current": true }]
 }

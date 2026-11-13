@@ -52,9 +52,18 @@
   --reveal-length: 3;
   --reveal-damping: 1;
 
-  // How long the cover's Learn more link takes to scroll to the first slide (layouts/deck, scripts/deck.ts), so
-  // its card slides out at the reveal's pace rather than the browser's quick default.
+  // How long the cover's Learn more tour takes to scroll from one card to the next (layouts/deck, scripts/deck.ts),
+  // so each card slides out at the reveal's pace rather than the browser's quick default.
   --learn-more-duration: 1.8s;
+
+  // The Learn more tour's reading speed, in words a minute: it waits on each card for a second plus its words at
+  // this pace. 238 is the average for silent reading of non-fiction in English (Brysbaert, 2019).
+  --reading-speed: 238;
+
+  // Going from page to page (base/transitions.scss): how long the old page's content takes to fade out, and how
+  // long the new page's cards then take to slide out from under the paper (scripts/waves.ts).
+  --page-transition-duration: 0.25s;
+  --page-enter-duration: 0.7s;
 
   // The cards' shadow falls like the paper's in the waves (components/waves): toward the upper left, over the
   // reach of the artwork's shifted copies (2.55 by 0.42 units), darkest at the edge and fading out. A unit is a

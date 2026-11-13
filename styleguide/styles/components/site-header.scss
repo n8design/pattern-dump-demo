@@ -62,3 +62,7 @@
     backdrop-filter: var(--deck-glass-backdrop);
   }
 }
+
+// Going from page to page (base/transitions.scss): the header is on a layer of its own, above the parts of the page
+// that travel on theirs, so text never passes over it.
+.site-header { view-transition-name: site-header; }

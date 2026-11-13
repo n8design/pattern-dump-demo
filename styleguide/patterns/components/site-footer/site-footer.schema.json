@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Site footer",
+  "description": "The site's footer: what it is built with, and who made it, each linking to GitHub.",
+  "type": "object",
+  "required": [
+    "site"
+  ],
+  "properties": {
+    "site": {
+      "type": "object",
+      "description": "Values every page shares: storefront.site in the site's config",
+      "properties": {
+        "footer": {
+          "type": "object",
+          "properties": {
+            "project": {
+              "type": "object",
+              "description": "The project the site is built with",
+              "required": [
+                "title",
+                "href"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Its repository"
+                }
+              }
+            },
+            "author": {
+              "type": "object",
+              "description": "Who made the site",
+              "required": [
+                "name",
+                "href"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string",
+                  "description": "Their profile"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

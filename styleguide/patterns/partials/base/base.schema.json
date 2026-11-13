@@ -15,7 +15,31 @@
       "description": "Values every page shares: storefront.site in the site's config",
       "required": ["title"],
       "properties": {
-        "title": { "type": "string", "description": "The site's name, in the header" }
+        "title": { "type": "string", "description": "The site's name, in the header" },
+        "footer": {
+          "type": "object",
+          "description": "The footer's links (components/site-footer); a part left out isn't shown",
+          "properties": {
+            "project": {
+              "type": "object",
+              "description": "What the site is built with, linking to its repository",
+              "required": ["title", "href"],
+              "properties": {
+                "title": { "type": "string" },
+                "href": { "type": "string", "format": "uri" }
+              }
+            },
+            "author": {
+              "type": "object",
+              "description": "Who made the site, linking to their profile",
+              "required": ["name", "href"],
+              "properties": {
+                "name": { "type": "string" },
+                "href": { "type": "string", "format": "uri" }
+              }
+            }
+          }
+        }
       }
     }
   }

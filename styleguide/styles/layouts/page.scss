@@ -1,2 +1,112 @@
-// Type comes from the base layer (h1); the body keeps a readable line length.
-.page-body { max-inline-size: var(--measure); }
+// A page of text (layouts/page): over the Sunset waves, on the same glass as the deck's cards, cream type with
+// apricot accents. The frame (partials/base, frame deck) gives the full screen, the waves and the fixed header.
+.page {
+  box-sizing: border-box;
+  inline-size: min(52rem, 100% - 2rem);
+  margin-block: calc(var(--site-header-size) + clamp(2rem, 8vh, 5rem)) clamp(3rem, 10vh, 6rem);
+  margin-inline: clamp(1rem, 6vw, 8rem) auto;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+  border: 1px solid var(--deck-glass-edge);
+  border-radius: var(--deck-glass-radius);
+  background: var(--deck-scrim);
+  box-shadow:
+    inset 0 1px 0 var(--deck-glass-sheen),
+    var(--deck-paper-shadow);
+  color: var(--deck-ink);
+}
+
+// Glass: the waves show through, blurred. Without backdrop-filter the page keeps the scrim above.
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .page {
+    background: var(--deck-glass);
+    -webkit-backdrop-filter: var(--deck-glass-backdrop);
+    backdrop-filter: var(--deck-glass-backdrop);
+  }
+}
+
+// The head: eyebrow, headline, standfirst.
+.page-eyebrow {
+  margin: 0;
+  color: var(--deck-accent);
+}
+
+.page-title {
+  margin-block: calc(var(--rhythm) * 0.25) calc(var(--rhythm) * 0.75);
+  font-size: var(--step-5);
+}
+
+.page-standfirst {
+  margin: 0;
+  max-inline-size: var(--measure);
+}
+
+// The text: a readable line length, the type scale's headings, and room between parts.
+.page-body {
+  max-inline-size: var(--measure);
+  margin-block-start: calc(var(--rhythm) * 1.5);
+  padding-block-start: calc(var(--rhythm) * 1.5);
+  border-block-start: 1px solid var(--deck-glass-edge);
+}
+
+.page-body > :first-child { margin-block-start: 0; }
+.page-body > :last-child { margin-block-end: 0; }
+
+.page-body h2 {
+  margin-block: calc(var(--rhythm) * 2) calc(var(--rhythm) * 0.5);
+}
+
+.page-body h3 {
+  margin-block: calc(var(--rhythm) * 1.5) calc(var(--rhythm) * 0.5);
+}
+
+.page-body a {
+  color: inherit;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.2em;
+}
+
+.page-body a:hover {
+  color: var(--deck-accent);
+}
+
+.page-body a:focus-visible {
+  outline: 2px solid var(--deck-accent);
+  outline-offset: 0.2em;
+  border-radius: 0.2em;
+}
+
+.page-body li + li {
+  margin-block-start: calc(var(--rhythm) * 0.25);
+}
+
+.page-body blockquote {
+  margin-inline: 0;
+  padding-inline-start: 1.25em;
+  border-inline-start: 3px solid var(--deck-accent);
+}
+
+// Images: they shrink with the column and keep their shape (their width and height attributes set it), with the
+// glass's rounded corners. An emphasised line under an image, in the same paragraph, is its caption.
+.page-body img {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+  border-radius: calc(var(--deck-glass-radius) * 0.5);
+}
+
+.page-body p:has(> img) {
+  margin-block: calc(var(--rhythm) * 1.5);
+}
+
+.page-body p:has(> img) > em {
+  display: block;
+  margin-block-start: calc(var(--rhythm) * 0.4);
+  font-family: var(--font-meta);
+  font-size: var(--step--1);
+  font-style: normal;
+}
+
+// Tucked under the paper as the page arrives, it slides out (scripts/waves.ts sets --waves-tuck; base/transitions.scss).
+.page {
+  translate: var(--waves-tuck, 0px) 0;
+}

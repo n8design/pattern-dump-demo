@@ -137,3 +137,25 @@ $layers: (
     --waves-colour: #{list.nth($layers, $i)};
   }
 }
+
+// Going from page to page (base/transitions.scss): the paper stays. The waves and the paper over the cards each
+// have a layer of their own, which holds still while the old page's content fades out between them.
+.waves { view-transition-name: waves; }
+.waves-over { view-transition-name: waves-paper; }
+
+// Arriving with a view transition, the cards (marked `data-waves-card`) stay hidden until the old page has gone
+// and the waves script has tucked them under the paper (`waves-entering`, partials/base and scripts/waves.ts). A
+// card that can't tuck fades in. Should the script never take over, they show anyway after a moment.
+:root.waves-js [data-waves-card] {
+  transition: opacity var(--page-transition-duration) ease-out;
+}
+
+:root.waves-entering [data-waves-card] {
+  opacity: 0;
+  animation: waves-enter-anyway 0s calc(var(--page-transition-duration) + 1.25s) forwards;
+}
+
+@keyframes waves-enter-anyway {
+  to { opacity: 1; }
+}
+

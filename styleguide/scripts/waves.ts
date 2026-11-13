@@ -21,6 +21,13 @@
 // under. The front layers are drawn again over the card, clipped to it, so the part still under the paper stays
 // under it; at rest none of them overlaps the card, so it lies on top with nothing to switch. Everything follows
 // the scroll position: scrolling back plays it backwards.
+//
+// Arriving from another page with a view transition (base/transitions.scss): the new page's cards start tucked
+// and slide out over --page-enter-duration (tokens.scss), once the old page has faded. An article's panel (marked
+// `data-waves-card="still"`) is a card that rests where it is rather than in the middle of the screen: it only
+// slides out on arrival, and is left alone after that. A card that can't tuck (a narrow screen, too little paper)
+// fades in instead. The arrival is caught early by an inline listener (partials/base), which hides the cards
+// (`waves-entering`) until the transition has finished and this script has them tucked.
 
 const DRIFT = { x: 1.3, y: 0.2 }; // user units per layer, at the top of the page; nothing at the bottom
 const DOMAIN = { x: -41, y: -9, w: 146, h: 62 }; // every point of a layer the screen can show, drift included
@@ -43,6 +50,7 @@ const COVER_MARGIN = 120;
 // a card closes per frame at 60 Hz as it chases its place (1: it follows the scroll exactly).
 const LENGTH = { name: "--reveal-length", fallback: 3, min: 2 };
 const DAMPING = { name: "--reveal-damping", fallback: 1, min: 0.01 };
+const ENTER = "--page-enter-duration"; // how long a card takes to slide out when the page arrives
 
 // Where a card moves, in screens of scrolling from where the screen's middle meets the top of its section. The
 // card stays in the middle of the screen (sticky) from half a screen in until the section's end minus its own
@@ -56,7 +64,9 @@ function phases(length: number) {
 interface Copy { dx: number; dy: number; mix: number; opacity: number }
 // depth: the layer the card lies on (-2 until measured); tuck: how far right, in CSS pixels, it moves to hide;
 // shown: where it is now, in CSS pixels right of its place, as it chases where the scroll puts it.
-interface Card { el: HTMLElement; section: HTMLElement; depth: number; tuck: number; shown?: number }
+// still: it rests where the page puts it (an article's panel) and only slides out on arrival; slides: a still card
+// that can tuck on this screen.
+interface Card { el: HTMLElement; section: HTMLElement; still: boolean; slides?: boolean; depth: number; tuck: number; shown?: number }
 type Point = { x: number; y: number };
 
 const root = document.querySelector<HTMLElement>(".waves");
@@ -79,7 +89,7 @@ function stop(root: HTMLElement): void {
   document.documentElement.classList.remove("waves-js");
   root.classList.remove("waves-live");
   root.querySelectorAll<SVGGElement>(".waves-layer").forEach((g) => g.style.removeProperty("translate"));
-  document.documentElement.classList.remove("waves-reveal");
+  document.documentElement.classList.remove("waves-reveal", "waves-entering");
   root.querySelector(".waves-canvas")?.remove();
   document.querySelector(".waves-over")?.remove();
 }
@@ -218,11 +228,14 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
 
   // The card where it rests (sticky, in the middle of the screen), as points across it in user units, each with its
   // share of the card's width from the left.
-  function restingSpot(el: HTMLElement) {
+  // A still card rests where it is now; only its part on screen counts.
+  function restingSpot(el: HTMLElement, still = false) {
     const v = view(), r = el.getBoundingClientRect();
     const tucked = parseFloat(el.style.getPropertyValue("--waves-tuck")) || 0;
-    const left = (r.left - tucked - v.ox) / v.s, top = (innerHeight / 2 - r.height / 2 - v.oy) / v.s;
-    const w = r.width / v.s, h = r.height / v.s;
+    const y0 = still ? Math.max(0, r.top) : innerHeight / 2 - r.height / 2;
+    const y1 = still ? Math.min(innerHeight, r.bottom) : y0 + r.height;
+    const left = (r.left - tucked - v.ox) / v.s, top = (y0 - v.oy) / v.s;
+    const w = r.width / v.s, h = Math.max(0, y1 - y0) / v.s;
     const points: (Point & { share: number })[] = [];
     for (let i = 0; i <= 12; i++) for (let j = 0; j <= 6; j++) points.push({ x: left + (w * i) / 12, y: top + (h * j) / 6, share: i / 12 });
     return { points, scale: v.s };
@@ -256,25 +269,28 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
     if (key === laidOut) return;
     laidOut = key;
     const html = document.documentElement;
-    cards = cardEls.map((el) => ({ el, section: sectionOf(el), depth: -2, tuck: 0 }));
+    cards = cardEls.map((el) => ({ el, section: sectionOf(el), still: el.dataset.wavesCard === "still", depth: -2, tuck: 0 }));
+    const sticky = cards.filter((c) => !c.still), still = cards.filter((c) => c.still);
+    const wide = matchMedia(REVEAL_FROM).matches;
+    const fits = (c: Card) => {
+      measure(c);
+      const left = c.el.getBoundingClientRect().left;
+      return c.depth < n - 1 && c.tuck > 0 && left + c.tuck <= innerWidth - MIN_EDGE;
+    };
     reveal = false;
-    if (matchMedia(REVEAL_FROM).matches) {
+    if (wide && sticky.length) {
       html.classList.add("waves-reveal");
-      cardEls.forEach((el) => el.style.removeProperty("--waves-tuck"));
-      reveal = cards.every((c) => {
-        measure(c);
-        const left = c.el.getBoundingClientRect().left;
-        return c.depth < n - 1 && c.tuck > 0 && left + c.tuck <= innerWidth - MIN_EDGE;
-      });
+      sticky.forEach((c) => c.el.style.removeProperty("--waves-tuck"));
+      reveal = sticky.every(fits);
     }
     if (!reveal) {
       html.classList.remove("waves-reveal");
-      cardEls.forEach((el) => el.style.removeProperty("--waves-tuck"));
+      sticky.forEach((c) => c.el.style.removeProperty("--waves-tuck"));
     }
-    if (over) over.hidden = !reveal;
+    still.forEach((c) => { c.el.style.removeProperty("--waves-tuck"); c.slides = wide && fits(c); });
     // Where each card rests (out from under the paper, still), for the deck's Learn more link (scripts/deck.ts).
     const p = phases(length), resting = (p.outTo + p.backFrom) / 2;
-    cards.forEach((c) => {
+    sticky.forEach((c) => {
       if (reveal) c.section.dataset.wavesRest = String(Math.round(scrollY + c.section.getBoundingClientRect().top + (resting - 0.5) * innerHeight));
       else delete c.section.dataset.wavesRest;
     });
@@ -288,16 +304,18 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
   }
   function measure(c: Card): Card {
     if (c.depth > -2) return c;
-    const spot = restingSpot(c.el);
-    // The layer it lies on: the highest whose paper overlaps it anywhere while it rests.
+    const spot = restingSpot(c.el, c.still);
+    // The layer it lies on: the highest whose paper overlaps it anywhere while it rests. A still card rests and
+    // moves at the scroll position it arrives at.
     const p = phases(length);
-    const resting = driftIn(c.section, [p.outTo, (p.outTo + p.backFrom) / 2, p.backFrom]);
+    const now = [driftAt(progressAt(scrollY))];
+    const resting = c.still ? now : driftIn(c.section, [p.outTo, (p.outTo + p.backFrom) / 2, p.backFrom]);
     c.depth = -1;
     for (let j = n - 1; j >= 0 && c.depth < 0; j--)
       if (resting.some((off) => spot.points.some((p) => covers(j, p.x - off[j].x, p.y - off[j].y)))) c.depth = j;
     // Tucked: moved right until the paper of the layers above covers all of it but its left edge, wherever it
     // tucks (as it comes in and as it leaves). A card that no paper can hide simply rests on top.
-    const moving = driftIn(c.section, [p.outFrom, p.backTo]);
+    const moving = c.still ? now : driftIn(c.section, [p.outFrom, p.backTo]);
     const hidden = (t: number) => moving.every((off) => spot.points.every((p) => p.share < SHOW_EDGE ||
       Array.from({ length: n - 1 - c.depth }, (_, i) => c.depth + 1 + i).some((j) => covers(j, p.x + t - off[j].x, p.y - off[j].y))));
     let tuck = 0;
@@ -313,6 +331,27 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
   let drawn = "";
   let lastFrame = performance.now();
   let wasChasing = false;
+
+  // The arrival: while a view transition plays, the cards wait tucked (entering, with no start time); once it has
+  // finished they slide out. Without a transition, everything is simply where it belongs.
+  let enterFrom: number | undefined = Infinity;
+  const enterMs = () => {
+    const m = /^\s*([\d.]+)\s*(ms|s)\s*$/.exec(getComputedStyle(document.documentElement).getPropertyValue(ENTER));
+    return m ? Number(m[1]) * (m[2] === "s" ? 1000 : 1) : 700;
+  };
+  function arrive(transition: ViewTransition | null | undefined): void {
+    if (!transition) return;
+    enterFrom = undefined;
+    cards.forEach((c) => { c.shown = undefined; });
+    drawn = "";
+    // Once the old page is gone, the cards show: tucked ones slide out, the others fade in (waves.scss).
+    const go = () => {
+      document.documentElement.classList.remove("waves-entering");
+      enterFrom = performance.now(); drawn = ""; request();
+    };
+    transition.finished.then(go, go);
+    draw();
+  }
 
   function draw(now = performance.now()): void {
     // The time since the last frame, while cards are chasing; the first frame after a pause counts as one frame,
@@ -332,6 +371,9 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
     const offsets = driftAt(progress);
     let chasing = false;
     layout();
+    // How far out the cards may be: 0 while they wait for the transition, 1 once they are out.
+    const enter = enterFrom === undefined ? 0 : enterFrom === Infinity ? 1 : settle((now - enterFrom) / enterMs());
+    if (enter < 1) chasing = true;
     if (reveal) {
       // Each card in a section on screen: out from under the paper once it rests, back under before it leaves.
       // The first card starts out and the last one stays out.
@@ -346,14 +388,23 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
         const at = (innerHeight / 2 - r.top) / innerHeight;
         const coming = i === 0 ? 1 : settle((at - p.outFrom) / (p.outTo - p.outFrom));
         const going = i === cards.length - 1 ? 1 : settle(1 - (at - p.backFrom) / (p.backTo - p.backFrom));
-        const target = measure(c).tuck * (1 - Math.min(coming, going));
-        let shown = c.shown === undefined ? target : c.shown + (target - c.shown) * share;
+        if (c.still) return;
+        const target = measure(c).tuck * (1 - Math.min(coming, going) * enter);
+        let shown = c.shown === undefined || enter < 1 ? target : c.shown + (target - c.shown) * share;
         if (Math.abs(target - shown) < 0.05) shown = target;
         else chasing = true;
         c.shown = shown;
         c.el.style.setProperty("--waves-tuck", `${shown.toFixed(2)}px`);
       });
     }
+    // Still cards: out from under the paper as the page arrives, then left alone.
+    for (const c of cards) {
+      if (!c.still || !c.slides) continue;
+      c.shown = measure(c).tuck * (1 - enter);
+      c.el.style.setProperty("--waves-tuck", `${c.shown.toFixed(2)}px`);
+    }
+    const papered = cards.filter((c) => (c.still ? c.slides && (c.shown ?? 0) > 0 : reveal));
+    if (over) over.hidden = !papered.length;
 
     gl!.viewport(0, 0, w, h);
     gl!.uniform4f(uView, v.s * ratio, v.ox * ratio, v.oy * ratio, h);
@@ -364,14 +415,14 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
     gl!.uniform1i(uFront, -1);
     gl!.drawArrays(gl!.TRIANGLES, 0, 3);
     behindCtx.transferFromImageBitmap(offscreen.transferToImageBitmap());
-    if (!reveal) { wasChasing = false; return; }
+    if (!papered.length) { wasChasing = chasing; if (chasing) { drawn = ""; request(); } return; }
 
     // Over the cards: the layers in front of each card's own layer, clipped to the card and its shadow. Where the
     // card has slid out from under them, they don't reach it, and nothing is drawn over it.
     gl!.clearColor(0, 0, 0, 0);
     gl!.clear(gl!.COLOR_BUFFER_BIT);
     const margin = Math.max(COVER_MARGIN, 5 * v.s);
-    for (const c of cards) {
+    for (const c of papered) {
       const r = c.el.getBoundingClientRect();
       if (c.depth < -1) continue;
       if (r.bottom < -margin || r.top > innerHeight + margin) continue;
@@ -395,6 +446,13 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
   function request(): void {
     if (!queued) { queued = true; requestAnimationFrame((t) => { queued = false; draw(t); }); }
   }
+  // Arrived with a view transition before this script ran (partials/base keeps it), or later from the
+  // back/forward cache.
+  layout();
+  // Should the page have shown before the inline listener was parsed, the transition may still be running.
+  arrive((window as { wavesArrival?: ViewTransition | null }).wavesArrival
+    ?? (document as Document & { activeViewTransition?: ViewTransition | null }).activeViewTransition);
+  addEventListener("pagereveal", (e) => arrive((e as Event & { viewTransition?: ViewTransition | null }).viewTransition));
   draw();
   removeEventListener("scroll", placeSvg);
   // A frame later, so the canvas's fade-in starts from transparent (waves.scss).
