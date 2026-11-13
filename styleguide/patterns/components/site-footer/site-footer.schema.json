@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Site footer",
-  "description": "The site's footer: what it is built with, and who made it, each linking to GitHub.",
+  "description": "The site's footer: what it is built with, who made it, and the style guide it comes from.",
   "type": "object",
   "required": [
     "site"
@@ -45,6 +45,22 @@
                 "href": {
                   "type": "string",
                   "description": "Their profile"
+                }
+              }
+            },
+            "styleguide": {
+              "type": "object",
+              "description": "The design system the site is built from, linking to its workbench",
+              "required": [
+                "title",
+                "href"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
                 }
               }
             }

@@ -1,0 +1,53 @@
+# Builds the demo and publishes it to GitHub Pages as one artifact, a project page at
+# https://n8design.github.io/pattern-dump-demo/: the website (site/) at that path, and the style guide's own
+# workbench (styleguide/) under styleguide/. `npm run pages` runs both builds and puts them together in _site/
+# (scripts/assemble-pages.mjs, which also puts the sub-path in front of the website's links and checks every one of
+# them again); it can be run locally the same way. The site's build checks every link, image and page for
+# accessibility before it writes anything, so a broken page fails the run and nothing is deployed.
+# (pattern-dump 0.3.0 has no browser-based checks to add here.)
+# Before the first run: Settings → Pages → Source: "GitHub Actions".
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a deploy that has started is never cancelled halfway.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The full history: a layout that shows page dates needs it, and pd build refuses a shallow clone then.
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22.22"
+          cache: npm
+      - run: npm ci
+      - run: npm run pages
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

@@ -10,6 +10,7 @@
   "scripts": {
     "dev:styleguide": "npm run dev -w @pattern-dump-demo/styleguide",
     "dev:site": "npm run dev -w @pattern-dump-demo/site",
-    "build": "npm run build -w @pattern-dump-demo/site"
+    "build": "npm run build -w @pattern-dump-demo/site",
+    "pages": "npm run build -w @pattern-dump-demo/site && npm run build -w @pattern-dump-demo/styleguide -- --base /pattern-dump-demo/styleguide/ && node scripts/assemble-pages.mjs /pattern-dump-demo/"
   }
 }

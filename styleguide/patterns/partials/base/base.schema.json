@@ -29,6 +29,15 @@
                 "href": { "type": "string", "format": "uri" }
               }
             },
+            "styleguide": {
+              "type": "object",
+              "description": "The design system the site is built from, linking to its workbench",
+              "required": ["title", "href"],
+              "properties": {
+                "title": { "type": "string" },
+                "href": { "type": "string" }
+              }
+            },
             "author": {
               "type": "object",
               "description": "Who made the site, linking to their profile",
