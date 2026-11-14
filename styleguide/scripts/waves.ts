@@ -1,10 +1,12 @@
 // The Sunset waves, moving: every layer of the waves component (components/waves) drawn with WebGL, each layer
 // drifting on its own as the page scrolls, and the deck's cards revealed out of the paper.
 //
-// Everything is read from the SVG the template wrote: the layers' shapes, their colours, the ground gradient and
-// Illustrator's shadow recipe (the shifted, tinted copies multiplied over what lies behind). So the canvas draws
-// the same picture as the SVG, and the SVG stays the picture wherever this script doesn't run: without WebGL 2,
-// without workers, or with reduced motion.
+// Everything is read from the artwork's SVG (components/waves-art): the layers' shapes, their colours, the ground
+// gradient and Illustrator's shadow recipe (the shifted, tinted copies multiplied over what lies behind). The page
+// shows that SVG as a cached file, the background of .waves (waves.scss); this script fetches the same file (from
+// the cache) and puts it inline, so it can read it and move its layers until the canvas is ready. So the canvas
+// draws the same picture as the file, and the file stays the picture wherever this script doesn't run: below 48rem,
+// without WebGL 2, without workers, or with reduced motion.
 //
 // How it draws: each layer's shape becomes a distance map (how far every point is from the layer's edge, worked
 // out once, in a worker). Per pixel, the shader walks the layers from front to back: a layer that covers the
@@ -70,16 +72,28 @@ interface Card { el: HTMLElement; section: HTMLElement; still: boolean; slides?:
 type Point = { x: number; y: number };
 
 const root = document.querySelector<HTMLElement>(".waves");
-const svg = root?.querySelector<SVGSVGElement>(".waves-svg");
 const motionOk = matchMedia("(prefers-reduced-motion: no-preference)");
 
 // Once per page: the workbench preview loads this script for the component and again for the deck layout.
 const first = root !== null && root.dataset.wavesScript === undefined;
 if (root) root.dataset.wavesScript = "";
 
-if (first && root && svg && motionOk.matches && typeof Worker !== "undefined" && typeof OffscreenCanvas !== "undefined"
+// WebGL only from the reveal's width: below it the cards can't tuck, and the still SVG is the picture (drawing the
+// drift there cost a phone half a second of main thread at load). A screen that widens past it later (a rotated
+// tablet, a resized window) starts it then.
+const wideEnough = matchMedia(REVEAL_FROM);
+if (first && root && motionOk.matches && typeof Worker !== "undefined" && typeof OffscreenCanvas !== "undefined"
   && typeof ImageBitmapRenderingContext !== "undefined") {
-  start(root, svg).then((ok) => { if (!ok) stop(root); }, () => stop(root));
+  const go = () => {
+    document.documentElement.classList.add("waves-js");
+    start(root).then((ok) => { if (!ok) stop(root); }, () => stop(root));
+  };
+  if (wideEnough.matches) go();
+  else {
+    stop(root);
+    const later = () => { if (wideEnough.matches) { wideEnough.removeEventListener("change", later); go(); } };
+    wideEnough.addEventListener("change", later);
+  }
 } else if (first) {
   stop(document.documentElement);
 }
@@ -88,7 +102,7 @@ function stop(root: HTMLElement): void {
   // Back to the still artwork as drawn (waves.scss): no mark for the script, no layer moved.
   document.documentElement.classList.remove("waves-js");
   root.classList.remove("waves-live");
-  root.querySelectorAll<SVGGElement>(".waves-layer").forEach((g) => g.style.removeProperty("translate"));
+  if (root.classList.contains("waves")) root.querySelector(".waves-svg")?.remove();
   document.documentElement.classList.remove("waves-reveal", "waves-entering");
   root.querySelector(".waves-canvas")?.remove();
   document.querySelector(".waves-over")?.remove();
@@ -99,24 +113,34 @@ const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
 // (zero speed at both ends). Going back is the same movement played backwards, so scrolling up retraces it.
 const settle = (t: number) => { const e = 1 - (1 - clamp01(t)) ** 2; return e * e * (3 - 2 * e); };
 
-async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
+// The artwork the background shows (waves-fanned.svg once `waves-js` is set), fetched (from the cache: the
+// background has loaded it) and put inline, unpainted (visibility: hidden), to be read: its shapes, colours and
+// shadow recipe. The background stays the picture until the canvas fades in over it; painting the inline copy as
+// well would draw the heavy artwork twice.
+async function artwork(root: HTMLElement): Promise<SVGSVGElement | null> {
+  const url = /url\(["']?([^"')]+)["']?\)/.exec(getComputedStyle(root).backgroundImage)?.[1];
+  if (!url) return null;
+  const res = await fetch(url);
+  if (!res.ok) return null;
+  const doc = new DOMParser().parseFromString(await res.text(), "image/svg+xml");
+  const el = doc.documentElement;
+  if (el.localName !== "svg" || !el.classList.contains("waves-svg")) return null;
+  const svg = document.importNode(el, true) as unknown as SVGSVGElement;
+  svg.setAttribute("aria-hidden", "true");
+  svg.style.visibility = "hidden";
+  root.prepend(svg);
+  return svg;
+}
+
+async function start(root: HTMLElement): Promise<boolean> {
   const offscreen = new OffscreenCanvas(1, 1);
   const gl = offscreen.getContext("webgl2", { antialias: false, alpha: true, premultipliedAlpha: true, powerPreference: "low-power" });
   if (!gl) return false;
+  const svg = await artwork(root);
+  if (!svg) return false;
   const wide = "drawingBufferColorSpace" in gl;
   if (wide) gl.drawingBufferColorSpace = "display-p3";
   const space: PredefinedColorSpace = wide ? "display-p3" : "srgb";
-
-  // Until the canvas takes over, the still SVG shows the arrangement the canvas starts with (the layers fanned out
-  // as far as the scroll position puts them), so the hand-over doesn't jump; the canvas then fades in over it.
-  const svgLayers = [...svg.querySelectorAll<SVGGElement>(".waves-layer")];
-  const placeSvg = () => {
-    const max = document.documentElement.scrollHeight - innerHeight;
-    const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 1;
-    svgLayers.forEach((g, k) => { g.style.translate = `${(1 - p) * k * DRIFT.x}px ${(1 - p) * k * DRIFT.y}px`; });
-  };
-  placeSvg();
-  addEventListener("scroll", placeSvg, { passive: true });
 
   // What the SVG holds.
   const paths = [...svg.querySelectorAll<SVGPathElement>("defs .waves-shape")];
@@ -454,7 +478,6 @@ async function start(root: HTMLElement, svg: SVGSVGElement): Promise<boolean> {
     ?? (document as Document & { activeViewTransition?: ViewTransition | null }).activeViewTransition);
   addEventListener("pagereveal", (e) => arrive((e as Event & { viewTransition?: ViewTransition | null }).viewTransition));
   draw();
-  removeEventListener("scroll", placeSvg);
   // A frame later, so the canvas's fade-in starts from transparent (waves.scss).
   requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add("waves-live")));
   addEventListener("scroll", request, { passive: true });

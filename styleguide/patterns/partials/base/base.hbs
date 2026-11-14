@@ -1,6 +1,6 @@
 <div class="site{{#if frame}} site--{{frame}}{{/if}}">
-  {{!-- Going from page to page (base/transitions.scss): leaving, the content takes its transition name just before the browser captures it; arriving, the cards stay hidden until the waves script has tucked them under the paper (scripts/waves.ts). Inline and first, so it listens before the page's first frame. --}}
-  <script>(function(d){addEventListener("pageswap",function(e){if(e.viewTransition)d.classList.add("page-leaving")});addEventListener("pagereveal",function(e){d.classList.remove("page-leaving");window.wavesArrival=e.viewTransition;if(e.viewTransition)d.classList.add("waves-entering")})})(document.documentElement)</script>
+  {{!-- Going from page to page (base/transitions.scss): leaving, the content takes its transition name just before the browser captures it; arriving on a screen wide enough for the waves script (48rem, scripts/waves.ts), the cards stay hidden until it has tucked them under the paper; narrower, the page's own cross-fade is the transition. Inline and first, so it listens before the page's first frame. --}}
+  <script>(function(d){addEventListener("pageswap",function(e){if(e.viewTransition)d.classList.add("page-leaving")});addEventListener("pagereveal",function(e){d.classList.remove("page-leaving");window.wavesArrival=e.viewTransition;if(e.viewTransition&&matchMedia("(min-width: 48rem)").matches)d.classList.add("waves-entering")})})(document.documentElement)</script>
   {{> components-site-header }}
   <main class="site-main" id="main">
     {{> @partial-block }}

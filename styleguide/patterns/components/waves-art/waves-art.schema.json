@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Waves artwork",
+  "description": "The Sunset waves as an SVG: the source of media/images/waves.svg and waves-fanned.svg (scripts/waves-svg.mjs at the repository's root). Not placed on pages.",
+  "type": "object",
+  "properties": {
+    "fanned": {
+      "type": "boolean",
+      "description": "Each layer fanned out to the right, as the waves script starts at the top of a page"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+// The Sunset waves' colours (components/waves-art, components/waves): the export's hex values, read the way
+// Illustrator displays them (slightly wider than sRGB, fitted from a screenshot of the artboard), as OKLCH.
+$ground-from: oklch(35.84% 0.154 341.2);
+$ground-to: oklch(23.75% 0.101 324.5);
+
+// Back to front, aubergine to sand.
+$layers: (
+  oklch(29.81% 0.134 326.0),
+  oklch(31.60% 0.140 331.0),
+  oklch(33.37% 0.146 335.7),
+  oklch(35.41% 0.151 340.8),
+  oklch(37.36% 0.157 344.6),
+  oklch(38.94% 0.163 347.3),
+  oklch(41.01% 0.169 351.2),
+  oklch(43.00% 0.176 354.0),
+  oklch(45.00% 0.183 356.5),
+  oklch(47.14% 0.191 359.0),
+  oklch(48.71% 0.196 1.0),
+  oklch(50.69% 0.203 2.8),
+  oklch(52.99% 0.204 10.0),
+  oklch(55.21% 0.206 16.2),
+  oklch(56.82% 0.204 19.7),
+  oklch(58.09% 0.202 21.9),
+  oklch(59.58% 0.197 24.8),
+  oklch(61.47% 0.191 28.0),
+  oklch(63.18% 0.186 31.5),
+  oklch(65.26% 0.181 35.5),
+  oklch(66.73% 0.176 38.6),
+  oklch(68.82% 0.172 42.7),
+  oklch(70.96% 0.167 47.4),
+  oklch(73.16% 0.165 51.7),
+  oklch(75.20% 0.157 55.6),
+  oklch(76.81% 0.151 58.4),
+  oklch(78.98% 0.144 62.6),
+  oklch(81.20% 0.137 67.3),
+  oklch(83.30% 0.132 71.6),
+  oklch(85.63% 0.127 76.7)
+);

@@ -1,28 +1,3 @@
-{{!-- Before the waves are painted: mark that the waves script may take over, so the still picture starts in the arrangement the canvas will draw (waves.scss). The script takes the mark off again if it can't run. --}}
-<script>document.documentElement.classList.add("waves-js")</script>
-<div class="waves" aria-hidden="true">
-  <svg class="waves-svg" viewBox="0 0 100 50" preserveAspectRatio="xMidYMid slice" focusable="false">
-    <defs>
-      <linearGradient id="waves-ground" x1="7.91" y1="-7.88" x2="46.91" y2="22.58" gradientUnits="userSpaceOnUse">
-        <stop offset="0" class="waves-ground-from"/>
-        <stop offset="1" class="waves-ground-to"/>
-      </linearGradient>
-      {{#each sunsetWaves.layers}}
-      <path id="waves-shape-{{@index}}" class="waves-shape" d="{{d}}"/>
-      {{/each}}
-    </defs>
-    <g class="waves-art">
-      <rect class="waves-ground" width="100" height="50" fill="url(#waves-ground)"/>
-      {{#each sunsetWaves.layers}}
-      <g class="waves-layer">
-        <g class="waves-shade">
-          {{#each @root.sunsetWaves.copies}}
-          <use href="#waves-shape-{{@../index}}" class="waves-copy" transform="translate({{x}} {{y}})" style="--mix: {{mix}}%; opacity: {{opacity}}"/>
-          {{/each}}
-        </g>
-        <use href="#waves-shape-{{@index}}" class="waves-fill"/>
-      </g>
-      {{/each}}
-    </g>
-  </svg>
-</div>
+{{!-- Before the waves are painted: mark that the waves script may take over, so the picture starts in the arrangement the canvas will draw (waves.scss: waves-fanned.svg). Only from the reveal's width (48rem, scripts/waves.ts): narrower screens keep the still picture. The script takes the mark off again if it can't run. --}}
+<script>if(matchMedia("(min-width: 48rem)").matches)document.documentElement.classList.add("waves-js")</script>
+<div class="waves" aria-hidden="true"></div>

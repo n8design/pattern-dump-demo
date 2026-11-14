@@ -14,6 +14,7 @@ npm run dev:styleguide     # the style guide's own workbench: http://localhost:4
 npm run dev:site           # the site: http://live.localhost:4000/, its workbench: http://pd.localhost:4000/
 npm run build              # writes site/dist/site and site/dist/workbench, checked in Chromium too
 npm run pages              # both builds, put together in _site/ as published
+npm run waves-svg          # after a change to components/waves-art: rewrites media/images/waves*.svg
 ```
 
 Edits in `styleguide/` reload both servers.

@@ -28,9 +28,10 @@ them overlaps it, so it lies on top with nothing to switch. The deck layout (`la
 paper over the cards hold still on layers of their own while the old page's content fades out. Then the new
 page's cards start tucked and slide out over `--page-enter-duration`, with the same easing. A card marked
 `data-waves-card="still"` (the page layout's article) rests where it is instead of in the middle of the screen:
-it only slides out on arrival. On narrow screens, or where a card can't tuck, the cards fade in instead.
+it only slides out on arrival. Where a card can't tuck, the cards fade in instead.
 
-**Without WebGL 2**, without JavaScript, or with reduced motion, the SVG is the picture: the same artwork,
-still.
+**Below 48rem** (the width the reveal needs), **without WebGL 2**, without JavaScript, or with reduced motion,
+the SVG is the picture: the same artwork, still. The script doesn't start WebGL there at all; a screen that widens
+past 48rem later starts it then.
 
 Decorative only (`aria-hidden`).

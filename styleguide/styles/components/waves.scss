@@ -1,52 +1,9 @@
 // The Sunset waves: a fixed, full-viewport background behind the deck.
 //
-// Built from Stefan's sunset-waves.svg (assets/styleguide/): its ground gradient and its 30 wave layers, each a
-// frame with a wave-shaped hole that reveals the layers beneath. The shapes are the component's data
-// (waves.json), and so is the artwork's own shadow: 14 shifted copies of every layer, tinted from white towards
-// the layer's colour and multiplied over what lies behind it, exactly as Illustrator draws them.
-//
-// This SVG is the still picture. Where WebGL is available and motion is welcome, scripts/waves.ts draws the same
-// layers, colours and shadows on a canvas over it, and moves every layer on its own as the page scrolls.
-@use "sass:list";
-
-// The colours as Illustrator shows them: the export's hex values, read the way Illustrator displays them
-// (slightly wider than sRGB, fitted from a screenshot of the artboard), as OKLCH.
-$ground-from: oklch(35.84% 0.154 341.2);
-$ground-to: oklch(23.75% 0.101 324.5);
-
-// Back to front, aubergine to sand.
-$layers: (
-  oklch(29.81% 0.134 326.0),
-  oklch(31.60% 0.140 331.0),
-  oklch(33.37% 0.146 335.7),
-  oklch(35.41% 0.151 340.8),
-  oklch(37.36% 0.157 344.6),
-  oklch(38.94% 0.163 347.3),
-  oklch(41.01% 0.169 351.2),
-  oklch(43.00% 0.176 354.0),
-  oklch(45.00% 0.183 356.5),
-  oklch(47.14% 0.191 359.0),
-  oklch(48.71% 0.196 1.0),
-  oklch(50.69% 0.203 2.8),
-  oklch(52.99% 0.204 10.0),
-  oklch(55.21% 0.206 16.2),
-  oklch(56.82% 0.204 19.7),
-  oklch(58.09% 0.202 21.9),
-  oklch(59.58% 0.197 24.8),
-  oklch(61.47% 0.191 28.0),
-  oklch(63.18% 0.186 31.5),
-  oklch(65.26% 0.181 35.5),
-  oklch(66.73% 0.176 38.6),
-  oklch(68.82% 0.172 42.7),
-  oklch(70.96% 0.167 47.4),
-  oklch(73.16% 0.165 51.7),
-  oklch(75.20% 0.157 55.6),
-  oklch(76.81% 0.151 58.4),
-  oklch(78.98% 0.144 62.6),
-  oklch(81.20% 0.137 67.3),
-  oklch(83.30% 0.132 71.6),
-  oklch(85.63% 0.127 76.7)
-);
+// The picture is a cached file, media/images/waves.svg (components/waves-art), as the background. Where WebGL is
+// available and motion is welcome, scripts/waves.ts draws the same layers, colours and shadows on a canvas over it,
+// and moves every layer on its own as the page scrolls.
+@use "waves-colours" as c;
 
 // The whole screen, as it is now: on a phone it keeps covering the screen as the browser's bars slide in and out.
 .waves {
@@ -58,10 +15,11 @@ $layers: (
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background: $ground-to;
+  // The artwork as one cached file (components/waves-art, written by scripts/waves-svg.mjs), covering the screen as
+  // the inline SVG did (slice).
+  background: c.$ground-to url("/assets/images/waves.svg") center / cover no-repeat;
 }
 
-.waves-svg,
 .waves-canvas {
   position: absolute;
   inset: 0;
@@ -83,20 +41,17 @@ $layers: (
   pointer-events: none;
 }
 
-// Where the waves script will take over (`waves-js`, set before the first paint, waves.hbs), the still picture
-// starts as the canvas will: at the top of the page, each layer fanned out to the right by its own amount
-// (scripts/waves.ts moves them on from there until the canvas is ready). Without the script, or with reduced
-// motion, it stays the artwork as drawn.
+// Where the waves script will take over (`waves-js`, set before the first paint, waves.hbs), the picture starts as
+// the canvas will: at the top of the page, each layer fanned out to the right by its own amount (waves-fanned.svg,
+// which the script also reads). Without the script, below 48rem, or with reduced motion, it stays the artwork as
+// drawn.
 @media (prefers-reduced-motion: no-preference) {
-  @for $i from 1 through list.length($layers) {
-    .waves-js .waves-layer:nth-of-type(#{$i}) {
-      translate: #{($i - 1) * 1.3}px #{($i - 1) * 0.2}px;
-    }
+  :root.waves-js .waves {
+    background-image: url("/assets/images/waves-fanned.svg");
   }
 }
 
-// The canvas fades in over the still picture, which the script has put in the same arrangement; once the fade
-// is done the still picture is no longer painted.
+// The canvas fades in over the picture (the background, already in the arrangement the canvas starts with).
 .waves-canvas {
   opacity: 0;
   transition: opacity 0.4s ease-out;
@@ -104,38 +59,6 @@ $layers: (
 
 .waves-live .waves-canvas {
   opacity: 1;
-}
-
-.waves-live .waves-svg {
-  visibility: hidden;
-  transition: visibility 0s 0.4s;
-}
-
-.waves-ground-from { stop-color: $ground-from; }
-.waves-ground-to { stop-color: $ground-to; }
-
-// Multiply blends with the layers drawn before it inside this group, the ground included.
-.waves-art {
-  isolation: isolate;
-}
-
-.waves-shade {
-  mix-blend-mode: multiply;
-}
-
-.waves-fill {
-  fill: var(--waves-colour);
-}
-
-// Each copy's share of the layer's colour (--mix) and its opacity come with it from waves.json.
-.waves-copy {
-  fill: color-mix(in display-p3, var(--waves-colour) var(--mix), white);
-}
-
-@for $i from 1 through list.length($layers) {
-  .waves-layer:nth-of-type(#{$i}) {
-    --waves-colour: #{list.nth($layers, $i)};
-  }
 }
 
 // Going from page to page (base/transitions.scss): the paper stays. The waves and the paper over the cards each
