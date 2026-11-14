@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Article card",
+  "description": "One article in a listing: its title as a link, its date, its teaser and its tags. Takes an entry of page.children as it is.",
+  "type": "object",
+  "required": [
+    "route",
+    "title"
+  ],
+  "properties": {
+    "route": {
+      "type": "string",
+      "description": "The article's address"
+    },
+    "title": {
+      "type": "string",
+      "description": "The article's title, as the card's link"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The teaser: the article's description, or its first paragraph. At most three lines are shown"
+    },
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The article's date, YYYY-MM-DD"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The article's tags"
+    }
+  }
+}

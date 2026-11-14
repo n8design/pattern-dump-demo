@@ -1,0 +1,23 @@
+{
+  "eyebrow": "Writing",
+  "title": "Articles",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  "body": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+  "site": {
+    "title": "Pattern Dump demo",
+    "footer": {
+      "project": { "title": "Pattern Dump", "href": "https://github.com/n8design/pattern-dump" },
+      "author": { "name": "Stefan Bauer", "href": "https://github.com/StfBauer" }
+    }
+  },
+  "nav": [
+    { "route": "/", "title": "Home" },
+    { "route": "/articles/", "title": "Articles", "current": true }
+  ],
+  "page": {
+    "children": [
+      { "route": "/articles/lorem-ipsum/", "title": "Lorem ipsum dolor sit amet", "description": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "date": "2026-11-14", "image": null, "tags": ["lorem", "ipsum"], "draft": false },
+      { "route": "/articles/dolor-sit/", "title": "Ut enim ad minim veniam", "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", "date": "2026-11-01", "image": null, "tags": [], "draft": false }
+    ]
+  }
+}

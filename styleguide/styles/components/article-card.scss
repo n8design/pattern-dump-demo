@@ -1,0 +1,76 @@
+// An article in a listing (components/article-card): its title as the one link, date, teaser and tags, on a
+// slightly darker pane of the page's glass. The link's ::after covers the whole card, so the card is its target
+// area while a screen reader still reads one link.
+.article-card {
+  position: relative;
+  padding: calc(var(--rhythm) * 0.75) calc(var(--rhythm) * 1);
+  border: 1px solid var(--deck-glass-edge);
+  border-radius: calc(var(--deck-glass-radius) * 0.6);
+  background: var(--code-bg);
+  color: var(--deck-ink);
+  transition: border-color 0.2s;
+}
+
+.article-card:hover,
+.article-card:focus-within {
+  border-color: var(--deck-accent);
+}
+
+.article-card-title {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: var(--leading-heading);
+}
+
+.article-card-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.article-card-link:focus-visible {
+  outline: none;
+}
+
+.article-card:has(.article-card-link:focus-visible) {
+  outline: 2px solid var(--deck-accent);
+  outline-offset: 0.2em;
+}
+
+.article-card-date {
+  margin: calc(var(--rhythm) * 0.25) 0 0;
+  color: var(--deck-accent);
+}
+
+.article-card-teaser {
+  margin: calc(var(--rhythm) * 0.5) 0 0;
+  // Never shortened in the data: three lines at most here.
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.article-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: calc(var(--rhythm) * 0.5) 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-meta);
+  font-size: var(--step--1);
+}
+
+.article-card-tags li {
+  padding: 0.1em 0.6em;
+  border: 1px solid var(--deck-glass-edge);
+  border-radius: 1em;
+}

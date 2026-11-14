@@ -26,5 +26,12 @@
       "title": "Style guides",
       "current": true
     }
-  ]
+  ],
+  "page": {
+    "date": "2026-11-14",
+    "tags": [
+      "lorem",
+      "ipsum"
+    ]
+  }
 }

@@ -2,6 +2,9 @@
 title: Why style guides matter
 layout: page
 eyebrow: Article
+date: 2026-11-13
+tags: [design-systems, accessibility, style-guides]
+redirectFrom: /style-guides/
 description: A living style guide keeps a design system and the website built from it in step. What the numbers say, where style guides break down, and what Pattern Dump does about it.
 ---
 
@@ -9,7 +12,7 @@ A style guide used to be a document: a PDF of colours, type and logos, written o
 living style guide is different. It shows the real components, built from the same code the product uses, so
 it can't drift away from what users actually see. That difference is what makes it worth the effort.
 
-![Placeholder image, to be replaced: a component shown in the workbench with its variants](/assets/content/placeholder-16x9.png)
+![Placeholder image, to be replaced: a component shown in the workbench with its variants](/assets/images/placeholder-16x9.png)
 *Placeholder: the workbench, with a component and its variants.*
 
 ## Faster work, measured
@@ -64,7 +67,7 @@ documented components, and keep them in one place. It adds what keeps such a pla
 - **One design system, many sites.** A style guide can be published as a package and used by any number of
   sites. This site is one: its pages live in one project, its components in another.
 
-![Placeholder image, to be replaced: a page that fails the build, with the file, line and column of the error](/assets/content/placeholder-4x3.png)
+![Placeholder image, to be replaced: a page that fails the build, with the file, line and column of the error](/assets/images/placeholder-4x3.png)
 *Placeholder: a value that doesn't fit a component's schema, and where Pattern Dump says it is.*
 
 One limit, honestly stated: the build's accessibility check runs without a browser, so it can't measure

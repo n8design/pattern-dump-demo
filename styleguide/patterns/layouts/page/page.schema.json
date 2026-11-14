@@ -27,6 +27,18 @@
     "description": {
       "type": "string",
       "description": "The page's standfirst under the headline, and its description for search results"
+    },
+    "page": {
+      "type": "object",
+      "description": "What the storefront works out for the page",
+      "properties": {
+        "date": {
+          "description": "The page's date, shown with its tags"
+        },
+        "tags": {
+          "description": "The page's tags; the date and tags show only on a page that has tags (an article)"
+        }
+      }
     }
   }
 }

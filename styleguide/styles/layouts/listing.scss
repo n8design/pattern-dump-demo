@@ -1,0 +1,9 @@
+// The listing (layouts/listing): a page's glass, head and text (its classes are layouts/page's, whose stylesheet
+// comes with them), then the folder's articles, one card each (components/article-card), in a column.
+.listing-entries {
+  display: grid;
+  gap: calc(var(--rhythm) * 1.25);
+  margin: calc(var(--rhythm) * 1.5) 0 0;
+  padding: 0;
+  list-style: none;
+}

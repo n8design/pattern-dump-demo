@@ -1,0 +1,16 @@
+{{#> partials-base frame="deck" }}
+{{> components-waves }}
+<article class="page listing" data-page-content data-waves-card="still">
+  <header class="page-head">
+    {{#if eyebrow}}<p class="page-eyebrow t-kicker">{{eyebrow}}</p>{{/if}}
+    <h1 class="page-title">{{title}}</h1>
+    {{#if description}}<p class="page-standfirst t-standfirst">{{description}}</p>{{/if}}
+  </header>
+  <div class="page-body">{{{body}}}</div>
+  <ul class="listing-entries" role="list">
+    {{#each page.children}}
+    <li>{{> components-article-card }}</li>
+    {{/each}}
+  </ul>
+</article>
+{{/partials-base}}
