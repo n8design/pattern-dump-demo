@@ -58,9 +58,12 @@
   font-variant-numeric: lining-nums tabular-nums;
 }
 
+// A long line wraps instead of scrolling: a code block written in markdown can't take a tabindex, so a block that
+// scrolled sideways would hide its end from keyboard users (axe's scrollable-region-focusable, at phone widths).
 :where(pre) {
   line-height: var(--leading-meta);
-  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 // Code blocks and code in running text: cream on nearly black, partly see-through (tokens.scss, foundations/code).
