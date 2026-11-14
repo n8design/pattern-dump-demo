@@ -35,6 +35,13 @@ jobs:
           node-version: "22.22"
           cache: npm
       - run: npm ci
+      # The waves background (styleguide/media/images/waves*.svg) is generated from components/waves-art, its
+      # styles and data/sunset-waves.json. Written again here, it must match what is committed: after a change to
+      # any of those, run `npm run waves-svg` and commit the two files.
+      - name: Generated waves artwork is up to date
+        run: |
+          npm run waves-svg
+          git diff --exit-code -- styleguide/media/images/waves.svg styleguide/media/images/waves-fanned.svg
       - run: npx playwright install --with-deps chromium
       - run: npm run pages
       - uses: actions/configure-pages@v6
