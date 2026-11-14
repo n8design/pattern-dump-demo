@@ -1,18 +1,14 @@
-import { defineConfig } from "pattern-dump";
+import type { PatternDumpConfigInput } from "pattern-dump";
 
-// The style guide as a project of its own: its own `pd dev` and workbench.
-// The same folders are described a second time in package.json ("patternDump"), which is what the
-// site reads when it uses this folder as a pattern package. Keep the two in step.
-export default defineConfig({
-  patternsDir: "./patterns",
+// The style guide as a project of its own: its own `pd dev` and workbench. Its folders (patterns, styles and the base
+// layer, data, scripts, images) are described once, in package.json's "patternDump" field, which both this
+// workbench and the site using the package read.
+//
+// A plain object, not defineConfig(): pattern-dump 0.4.0's defineConfig fills in the default ./src/patterns and
+// ./src/styles, which then clash with package.json's folders.
+export default {
   outDir: "./dist",
-  styles: { strategy: "parallel", dir: "./styles" },
-  documentBase: ["base"],
-  dataDir: "./data",
-  // Images for pages and samples, served at /assets/images/ (the folder's name), as the package serves it too.
-  assets: { strategy: "central", dir: ["./media/images"] },
-  scriptsDir: "./scripts",
   shell: {
     brand: { title: "Pattern Dump demo: style guide" },
   },
-});
+} satisfies PatternDumpConfigInput;

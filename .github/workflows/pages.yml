@@ -1,10 +1,9 @@
 # Builds the demo and publishes it to GitHub Pages as one artifact, a project page at
-# https://n8design.github.io/pattern-dump-demo/: the website (site/) at that path, and the style guide's own
-# workbench (styleguide/) under styleguide/. `npm run pages` runs both builds and puts them together in _site/
-# (scripts/assemble-pages.mjs, which also puts the sub-path in front of the website's links and checks every one of
-# them again); it can be run locally the same way. The site's build checks every link, image and page for
-# accessibility before it writes anything, so a broken page fails the run and nothing is deployed.
-# (pattern-dump 0.3.0 has no browser-based checks to add here.)
+# https://lab.n8d.studio/pattern-dump-demo/ (the organisation's custom domain): the website (site/) at that path, and the style guide's own
+# workbench (styleguide/) under styleguide/. `npm run pages` runs both builds, each for its address, and copies them
+# together into _site/ (scripts/assemble-pages.mjs); it can be run locally the same way. The site's build checks
+# every link, image and page for accessibility before it writes anything, the second time in Chromium (pd build
+# --browser: contrast, phone and desktop sizes), so a broken page fails the run and nothing is deployed.
 # Before the first run: Settings → Pages → Source: "GitHub Actions".
 name: Pages
 
@@ -36,6 +35,7 @@ jobs:
           node-version: "22.22"
           cache: npm
       - run: npm ci
+      - run: npx playwright install --with-deps chromium
       - run: npm run pages
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
