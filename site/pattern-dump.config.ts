@@ -14,6 +14,9 @@ export default defineConfig({
     // The style guide's own workbench, published beside the site (see the root's "pages" script). The site's build
     // also writes a workbench of its own (dist/workbench, the same components from the package); it isn't published.
     workbenchUrl: "/pattern-dump-demo/styleguide/",
+    // The link-preview image (og:image) of every page without an image of its own: the style guide's
+    // components/og-image, screenshotted.
+    image: "/assets/images/og-image.png",
     site: {
       title: "Pattern Dump demo",
       // The header's links (components/site-header): the pages, then this site's style guide (workbenchUrl).

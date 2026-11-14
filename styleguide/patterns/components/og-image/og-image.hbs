@@ -1,0 +1,30 @@
+<div class="og-image">
+  <svg class="og-image-art" viewBox="{{crop}}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="og-image-ground" x1="7.91" y1="-7.88" x2="46.91" y2="22.58" gradientUnits="userSpaceOnUse">
+        <stop offset="0" class="waves-ground-from"/>
+        <stop offset="1" class="waves-ground-to"/>
+      </linearGradient>
+      {{#each sunsetWaves.layers}}
+      <path id="og-image-shape-{{@index}}" d="{{d}}"/>
+      {{/each}}
+    </defs>
+    <g class="waves-art">
+      <rect x="-50" y="-50" width="200" height="150" fill="url(#og-image-ground)"/>
+      {{#each sunsetWaves.layers}}
+      <g class="waves-layer">
+        <g class="waves-shade">
+          {{#each @root.sunsetWaves.copies}}
+          <use href="#og-image-shape-{{@../index}}" class="waves-copy" transform="translate({{x}} {{y}})" style="--mix: {{mix}}%; opacity: {{opacity}}"/>
+          {{/each}}
+        </g>
+        <use href="#og-image-shape-{{@index}}" class="waves-fill"/>
+      </g>
+      {{/each}}
+    </g>
+  </svg>
+  <div class="og-image-card">
+    <p class="og-image-title">{{title}}</p>
+    <p class="og-image-description">{{description}}</p>
+  </div>
+</div>
