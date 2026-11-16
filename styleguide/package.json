@@ -30,6 +30,6 @@
     "build": "pd build"
   },
   "devDependencies": {
-    "pattern-dump": "0.4.2"
+    "pattern-dump": "0.5.0"
   }
 }

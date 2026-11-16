@@ -24,7 +24,8 @@
       "description": "What the storefront works out for the page",
       "properties": {
         "children": {
-          "description": "The folder's pages, one article card each"
+          "description": "The folder's pages, one article card each",
+          "x-pd-card": "components/article-card"
         }
       }
     }

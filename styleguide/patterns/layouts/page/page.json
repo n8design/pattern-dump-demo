@@ -30,8 +30,18 @@
   "page": {
     "date": "2026-11-14",
     "tags": [
-      "lorem",
-      "ipsum"
+      {
+        "key": "lorem",
+        "label": "Lorem",
+        "description": null,
+        "route": null
+      },
+      {
+        "key": "ipsum",
+        "label": "Ipsum",
+        "description": null,
+        "route": null
+      }
     ]
   }
 }

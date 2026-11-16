@@ -16,7 +16,7 @@
   ],
   "page": {
     "children": [
-      { "route": "/articles/lorem-ipsum/", "title": "Lorem ipsum dolor sit amet", "description": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "date": "2026-11-14", "image": null, "tags": ["lorem", "ipsum"], "draft": false },
+      { "route": "/articles/lorem-ipsum/", "title": "Lorem ipsum dolor sit amet", "description": "Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.", "date": "2026-11-14", "image": null, "tags": [{ "key": "lorem", "label": "Lorem", "description": null, "route": null }, { "key": "ipsum", "label": "Ipsum", "description": null, "route": null }], "draft": false },
       { "route": "/articles/dolor-sit/", "title": "Ut enim ad minim veniam", "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", "date": "2026-11-01", "image": null, "tags": [], "draft": false }
     ]
   }
